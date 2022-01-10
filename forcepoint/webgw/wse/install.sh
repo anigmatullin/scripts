@@ -8,9 +8,9 @@ cd /var/wse
 
 yum -y install wget unzip
 
-wget http://cdn.websense.com/downloads/files/v8.5.3/Web853Setup_Lnx.tar.gz
+wget http://cdn.websense.com/downloads/files/v8.5.4/Web854Setup_Lnx.tar.gz
 
-tar -xvf Web853Setup_Lnx.tar.gz -C /var/wse
+sudo tar -xvf Web854Setup_Lnx.tar.gz -C /var/wse
 
 
 yum -y install epel-release
@@ -23,6 +23,6 @@ systemctl start haveged.service
 
 
 cd /var/wse
-./install.sh
+sudo ./install.sh
 
 
