@@ -20,4 +20,5 @@ echo "sudo tail -f /var/log/xrdp-sesman.log"
 echo "would show the following:"
 echo "Window manager (pid yyyyy, display xx) exited quickly (1 secs). This could indicate a window manager config problem"
 
+echo "settings can be customized here: /etc/xrdp/xrdp.ini"
 
