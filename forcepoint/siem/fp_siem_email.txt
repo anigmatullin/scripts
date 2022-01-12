@@ -1,0 +1,52 @@
+
+http://www.websense.com/content/support/library/email/v85/email_siem/siem_log_map.pdf
+
+
+Connection Log:
+```
+<13>%<:%b %_2d %T> %<applianceHostName> CEF:0|Forcepoint|Email Security|%<version>|Connection|Connection|5| applianceIP=%<applianceIP> applianceHostName=%<=applianceHostName> timestamp=%<timestamp> connectionID=%<connectionID> sourceIP=%<sourceIP> destinationIP=%<destinationIP> transportType=%<transportType> reason=%<reason> spfResult=%<spfResult> %<\n>
+```
+
+
+
+Message Log:
+```
+<13>%<:%b %_2d %T> %<applianceHostName> CEF:0|Forcepoint|Email Security|%<version>|Message|Message|5| applianceIP=%<applianceIP> applianceHostName=%<=applianceHostName> timestamp=%<timestamp> connectionID=%<connectionID> messageId=%<messageId> sender=%<=sender> recipient=%<=recipient> subject=%<=subject> messageSize=%<messageSize> tsip=%<tsip> msg_from=%<=from> msg_to=%<=to> msg_cc=%<=cc> x_mailer=%<=x_mailer> %<\n>
+```
+
+
+
+Policy Log:
+```
+<13>%<:%b %_2d %T> %<applianceHostName> CEF:0|Forcepoint|Email Security|%<version>|Policy|%<reason>|5| applianceIP=%<applianceIP> applianceHostName=%<=applianceHostName> timestamp=%<timestamp> messageId=%<messageId> sender=%<=sender> recipient=%<=recipient> fromAddress=%<=fromAddress> replyToAddress=%<=replyToAddress> msg_to=%<=to> msg_cc=%<=cc> messageSize=%<messageSize> direction=%<direction> policyName=%<=policyName> ruleName=%<=ruleName> action=%<action> urlDetail=%<=urlDetail> spamEngineName=%<=spamEngineName> virusName=%<=virusName> fileResult=%<=fileResult> exceptionReason=%<=exceptionReason> hybridSpamScore=%<=hybridSpamScore> localSpamScore=%<=localSpamScore> subject=%<=subject> tsip=%<tsip> x_mailer=%<=x_mailer> %<\n>
+```
+
+
+Delivery Log:
+```
+<13>%<:%b %_2d %T> %<applianceHostName> CEF:0|Forcepoint|Email Security|%<version>|Delivery|Delivery|5| applianceIP=%<applianceIP> applianceHostName=%<=applianceHostName> timestamp=%<timestamp> connectionID=%<connectionID> messageId=%<messageId> recipient=%<=recipient> sourceIP=%<sourceIP> destinationIP=%<destinationIP> encryptedDelivery=%<encryptedDelivery> deliveryCode=%<deliveryCode> deliveryCodeInfo=%<deliveryCodeInfo> transportType=%<transportType> action=%<action> %<\n>
+```
+
+
+Hybrid Log:
+```
+<13>%<:%b %_2d %T> %<applianceHostName> CEF:0|Forcepoint|Email Security|%<version>|Hybrid|Hybrid|5| applianceIP=%<applianceIP> applianceHostName=%<=applianceHostName> timestamp=%<timestamp> messageId=%<messageId> sender=%<=sender> recipient=%<=recipient> subject=%<=subject> messageSize=%<messageSize> sourceIP=%<sourceIP> action=%<=action> reason=%<=reason> spamScore=%<=spamScore> %<\n>
+```
+
+
+Audit Log:
+```
+<13>%<:%b %_2d %T> %<applianceHostName> CEF:0|Forcepoint|Email Security|%<version>|Audit Log|Audit Log|5| timestamp=%<timestamp> applianceIP=%<applianceIP> clientIP=%<clientIP> user=%<=user> role=%<=role> page=%<page> element=%<element> action=%<action> details=%<=details> %<\n>
+```
+
+Note!!!!!Potential additional fields
+
+Policy:
+action
+
+
+
+Message:
+externalID
+urlDetail
+
