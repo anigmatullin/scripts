@@ -1,0 +1,26 @@
+select 
+
+record_number,
+source_server_ip,
+CONVERT(DATETIME,  incoming_view.date_time AT TIME ZONE 'Ekaterinburg Standard Time'  AT TIME ZONE 'UTC') as dt,
+incoming_view.bytes_sent,
+incoming_view.bytes_received,
+incoming_view.category as cat_id,
+category.name as cat_name,
+incoming_view.disposition_code as action_id,
+disposition.description as action_name,
+users.user_login_name as username,
+incoming_view.source_ip as src_ip,
+incoming_view.destination_ip as dst_ip,
+port as dst_port,
+incoming_view.url as domain,
+incoming_view.full_url as url,
+incoming_view.hits
+ 
+from dbo.incoming_view, dbo.users, dbo.category, dbo.disposition
+ 
+where dbo.incoming_view.user_id = dbo.users.user_id
+and dbo.incoming_view.category = dbo.category.category
+and dbo.incoming_view.disposition_code = dbo.disposition.disposition_code
+ 
+order by date_time asc
