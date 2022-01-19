@@ -23,4 +23,4 @@ where dbo.incoming_view.user_id = dbo.users.user_id
 and dbo.incoming_view.category = dbo.category.category
 and dbo.incoming_view.disposition_code = dbo.disposition.disposition_code
  
-order by date_time asc
+order by record_number
