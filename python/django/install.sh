@@ -1,4 +1,5 @@
 pip3 install Django
+pip3 install python-decouple
 
 django-admin startproject prjname
 
