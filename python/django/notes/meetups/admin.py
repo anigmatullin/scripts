@@ -7,8 +7,8 @@ from . import models
 
 
 class NotesAdmin(admin.ModelAdmin):
-    list_display = ('subject', 'owner')
-    list_filter = ('subject', 'owner')
+    list_display = ('subject',)
+    list_filter = ('subject',)
 
 
 admin.site.register(models.Note, NotesAdmin)
