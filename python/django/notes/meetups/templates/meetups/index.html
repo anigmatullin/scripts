@@ -1,0 +1,18 @@
+{% extends 'meetups/base/app.html' %}
+
+{% block content%}
+    <h3>Notes Below</h3>
+
+    <ul>
+    {% for item in notes %}
+        <li>
+            {{item.subject}}, 
+
+            {%if item.image%}
+                {{item.image.url}}
+            {%endif%}
+            
+        </li>
+    {% endfor %}
+    </ul>
+{% endblock%}
