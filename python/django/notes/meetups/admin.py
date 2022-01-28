@@ -13,3 +13,4 @@ class NotesAdmin(admin.ModelAdmin):
 
 admin.site.register(models.Note, NotesAdmin)
 admin.site.register(models.Author)
+admin.site.register(models.Tag)

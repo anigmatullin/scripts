@@ -1,0 +1,85 @@
+{% extends 'meetups/base/app.html' %}
+
+{% block content%}
+
+    <div class="row mt-5">
+        <div class="col-4"></div>
+        <div class="col-4">
+
+            <form action="" method="post">
+                {% csrf_token %}
+
+                <input type="hidden" name="next" value="{{next}}">
+
+                {% if form.errors %}
+                errs
+                {% endif %}
+
+                        <!-- username -->
+
+        <div class="m-2">
+
+            <label>Username:</label>
+
+        {% if form.username.errors %}
+
+            <ul>
+                {% for error in form.username.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+            <input class="form-control is-invalid"
+                type="text"
+                name="username"
+                autofocus
+                required
+                autocapitalize="none"
+                autocomplete="username"
+                maxlength="150"
+                value="{{form.name.value|default_if_none:''}}"
+            />
+
+        {% else %}
+
+            <input class="form-control"
+                type="text"
+                name="username"
+                autofocus
+                required
+                autocapitalize="none"
+                autocomplete="username"
+                maxlength="150"
+                value="{{form.name.value|default_if_none:''}}"
+            />
+            
+        {% endif %}
+
+        </div>
+
+
+        <!-- password -->
+
+        <div class="m-2">
+
+            <label>Password:</label>
+
+            <input class="form-control"
+                type="password"
+                name="password"
+                required
+                autocomplete="current-password"
+                maxlength="50"
+            />
+
+        </div>
+
+        <div class="m-2">
+            <input class="btn btn-primary" type="submit" value="Login!">
+        </div>
+
+        </form>
+        
+        </div>
+    </div>
+
+{% endblock%}

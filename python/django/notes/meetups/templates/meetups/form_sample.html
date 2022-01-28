@@ -1,0 +1,60 @@
+
+        {{ form.non_field_errors }}
+
+        <!-- name -->
+
+        <div class="m-2">
+
+            <label>{{form.name.label}}</label>
+
+        {% if form.name.errors %}
+
+            <ul>
+                {% for error in form.name.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+            <input class="form-control is-invalid" type="text" name="name" value="{{form.name.value|default_if_none:''}}">
+
+        {% elif form.is_bound %}
+
+            <input class="form-control is-valid" type="text" name="name" value="{{form.name.value|default_if_none:''}}">
+
+        {% else %}
+
+            <input class="form-control" type="text" name="name">
+            
+        {% endif %}
+
+        </div>
+
+        
+
+        <!-- sender -->
+
+        <div class="m-2">
+
+            <label>{{form.sender.label}}</label>
+
+        {% if form.sender.errors %}
+
+            <ul>
+                {% for error in form.sender.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+            <input class="form-control is-invalid" type="text" name="sender" value="{{form.sender.value|default_if_none:''}}">
+
+        {% elif form.is_bound %}
+
+            <input class="form-control is-valid" type="text" name="sender" value="{{form.sender.value|default_if_none:''}}">
+
+        {% else %}
+
+            <input class="form-control" type="text" name="sender">
+            
+        {% endif %}
+
+        </div>
+        
+
