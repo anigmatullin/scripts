@@ -1,0 +1,42 @@
+{
+    "dev": {
+        "driver": "mysql",
+        "host": "localhost",
+        "user": "root",
+        "password": "qaz123ZX",
+        "database": "mailcheck"
+    },
+  
+    "test": {
+        "driver": "mssql",
+        "host": "192.168.1.204",
+        "user": "sa",
+        "password": "Moscow@2017",
+        "database": "mailcheck"
+    },
+  
+    "prod": {
+      "driver": "mysql",
+      "user": "root",
+      "password": "root"
+    },
+  
+    "pg": {
+      "driver": "pg",
+      "user": "test",
+      "password": "test",
+      "host": "localhost",
+      "database": "mydb",
+      "port": "20144",
+      "ssl": "true",
+      "schema": "my_schema"
+    },
+  
+    "mongo": {
+      "driver": "mongodb",
+      "database": "my_db",
+      "host": "localhost"
+    },
+  
+    "other": "postgres://uname:pw@server.com/dbname"
+  }
