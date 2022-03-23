@@ -6,7 +6,7 @@ sudo apt install docker.io
 
 sudo usermod -aG docker $USER
 
-newgrp
+newgrp docker
 
 id -nG
 
