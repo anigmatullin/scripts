@@ -1,4 +1,5 @@
 
+sudo apt install jq
 
 sudo curl -L https://github.com/docker/compose/releases/download/v2.2.3/docker-compose-linux-x86_64 -o /bin/docker-compose
 sudo chmod +x /bin/docker-compose
@@ -35,7 +36,6 @@ postal bootstrap postal.lab.local
 postal initialize
 postal make-user
 postal start
-
 
 docker run -d \
    --name postal-caddy \
