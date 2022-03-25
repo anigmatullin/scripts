@@ -1,27 +1,32 @@
-<div id="<%= dom_id contact %>">
-  <p>
-    <strong>Name:</strong>
-    <%= contact.name %>
-  </p>
+<div id="<%= dom_id contact %>" class="card" style="width: 18rem;">
 
-  <p>
-    <strong>Lastname:</strong>
-    <%= contact.lastname %>
-  </p>
+  <table class="table">
 
-  <p>
-    <strong>Email:</strong>
-    <%= contact.email %>
-  </p>
+    <tr>
+      <td>Name:</td>
+      <td><%= contact.name %></td>
+    </tr>
 
-  <p>
-    <strong>Phone:</strong>
-    <%= contact.phone %>
-  </p>
+    <tr>
+      <td>Lastname:</td>
+      <td><%= contact.lastname %></td>
+    </tr>
 
-  <p>
-    <strong>Org:</strong>
-    <%= contact.org %>
-  </p>
+    <tr>
+      <td>Email:</td>
+      <td><%= contact.email %></td>
+    </tr>
+
+    <tr>
+      <td>Phone:</td>
+      <td><%= contact.phone %></td>
+    </tr>
+
+    <tr>
+      <td>Org:</td>
+      <td><%= contact.org %></td>
+    </tr>
+
+  </table>
 
 </div>

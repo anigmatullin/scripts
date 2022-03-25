@@ -10,28 +10,55 @@
 
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
+
+    <style>
+
+  nav>ul>li>a {
+      text-decoration: none;
+      color: white;
+  }
+
+  nav>ul>li>a:hover {
+      text-decoration: none;
+      color: orange;
+  }
+
+  nav>ul>li>a.active {
+      text-decoration: none;
+      color: red;
+  }
+
+  .nav-link.active {
+      text-decoration: none;
+      color: red;
+  }
+
+  nav>ul>li {
+      list-style: none;
+  }
+
+  nav {
+      background-color: black;
+      padding-top: 10px;
+  }
+
+  body {
+      /* background-color: #6c757d; */
+      background-color: #f1f1f1;
+      overflow-x: hidden;
+      overflow-y: auto;
+  }
+
+  </style>
+
+
   </head>
 
   <body>
 
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
-
-  <div class="container-fluid">
-
-    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-
-      <div class="navbar-nav">
-        <a class="nav-link" href="/posts/">Posts</a>
-        <a class="nav-link" href="/contacts/">Contacts</a>
-        <a class="nav-link" href="/posts/new">Add Post</a>
-        <a class="nav-link" href="/contacts/new">Add Contact</a>
-      </div>
-
-    </div>
-  </div>
-</nav>
-
+    <%= render 'layouts/nav' %>
 
     <%= yield %>
+
   </body>
 </html>

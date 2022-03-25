@@ -1,14 +1,37 @@
-<p style="color: green"><%= notice %></p>
+<div class="content m-4">
 
-<h1>Contacts</h1>
+  <div class="mb-3">
+
+    <p style="color: green"><%= notice %></p>
+    <strong>Contacts</strong> <%= link_to "Add", new_contact_path %>
+
+  </div>
+
 
 <div id="contacts">
+  <table class="table table-bordered">
+    <tr>
+      <th>Name</th>
+      <th>Lastname</th>
+      <th>Email</th>
+      <th>Phone</th>
+      <th>Org</th>
+      <th>Action</th>
+    </tr>
+
+
   <% @contacts.each do |contact| %>
-    <%= render contact %>
-    <p>
-      <%= link_to "Show this contact", contact %>
-    </p>
+    <tr>
+      <td><%= contact.name %></td>
+      <td><%= contact.lastname %></td>
+      <td><%= contact.email %></td>
+      <td><%= contact.phone %></td>
+      <td><%= contact.org %></td>
+      <td><%= link_to "Show", contact %></td>
+    </tr>
   <% end %>
+
+  </table>
 </div>
 
-<%= link_to "New contact", new_contact_path %>
+</div>
