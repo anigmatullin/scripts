@@ -2,12 +2,9 @@
 
     <ul class="d-flex align-items-center">
 
-        <li><a href="/" id="a-home" class="p-3">Home</a></li>
-
-        <li><a href="/posts/"  id="a-db" class="p-3">Posts</a></li>
-
-        <li><a href="/contacts"  id="a-src" class="p-3">Contacts</a></li>
-
+        <li><%= link_to "Home", "/", class:"p-3" %></li>
+        <li><%= link_to "Posts", posts_path, class:"p-3" %></li>
+        <li><%= link_to "Contacts", contacts_path, class:"p-3" %></li>
 
     </ul>
 

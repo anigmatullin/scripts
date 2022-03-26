@@ -6,3 +6,22 @@ set smarttab
 set smartindent
 set nocompatible
 set wildmenu
+set visualbell
+set autoread
+
+syntax on
+filetype on
+filetype indent on
+filetype plugin on
+
+
+call plug#begin('~/.config/nvim/autoload')
+
+Plug 'mattn/emmet-vim'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'dkarter/bullets.vim'
+Plug 'tpope/vim-rails'
+Plug 'tpope/vim-commentary'
+Plug 'preservim/NERDTree'
+
+call plug#end()
