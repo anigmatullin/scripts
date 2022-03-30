@@ -1,0 +1,3 @@
+
+./haraka.sh  -c ./config
+
