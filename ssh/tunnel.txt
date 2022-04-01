@@ -1,0 +1,1 @@
+nssm install tun "C:\Program Files (x86)\PuTTY\plink.exe" "-load locall -l tunnel -pw P@ssw0rd -N"
