@@ -1,0 +1,49 @@
+
+Конфигурирование лабораторной среды:
+
+1. Войдите на nps, запустите cmd
+2. netdom renamecomputer . /newname:dc-02 /force
+3. shutdown -r -t 0
+
+
+Установка AD DS в существующем лесу
+
+dc-01  - контроллер домена (windows server 2008 full)
+dc-02  - контроллер домена (windows server 2008 full)
+cl-0l  - рабочая станция в домене (windows vista)
+
+
+
+===========Задание 1. Установка дополнительного контроллера домена ==================================
+
+Выполните задание на dc-02
+
+0. Отключите IPv6
+1. Запустите ServerManager
+2. Добавьте роль AD DS
+3. На странице Results, щелкните по "Close this wizard and launch ... dcpromo"
+4. На странице Summary в dcpromo, нажмите кнопку "Export", cохраните файл ответов в c:\ad.txt.
+5. Откажитесь от инсталляции, нажмите Cancel.
+7. В файле c:\ad.txt, установите параметр SafeModeAdminPassword=Pa$$w0rd
+8. Запустите dcpromo /unattend:c:\ad.txt
+
+===========Задание 2. Проверка инсталляции контроллера домена ==================================
+
+Выполните задание на dc-02
+
+1. Start->Run->cmd
+2. servermanagercmd -query
+3. servermanagercmd -install PowerShell
+4. Start->Run->powershell
+5. get-eventlog "DFS Replication" | where-object {$_.eventid -eq 4604 or $_.eventid -eq 4602} | select-object -property message | format-list
+6. gwmi win32_share
+7. dcdiag /test:dns
+8. dcdiag /test:replications
+9. dcdiag /test:netlogons
+10. Просмотрите консоли dsa.msc, domain.msc, dssite.msc
+
+
+=========== Финализация ==================================
+
+Выключите dc-01, dc-02 без сохранения изменений.
+

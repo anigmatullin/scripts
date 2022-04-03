@@ -1,0 +1,13 @@
+yum groupinstall "Development Tools"
+
+yum install python-devel
+
+yum install openldap-clients openldap-devel
+
+wget http://www.samba.org/samba/ftp/stable/samba-4.1.4.tar.gz
+
+./configure --prefix=/opt/samba --with-ads  --with-winbind
+
+make
+
+make install

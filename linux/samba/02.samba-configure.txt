@@ -1,0 +1,74 @@
+# cat /etc/resolv.conf
+nameserver 172.30.0.2
+search wscert.com
+
+yum install vim krb5-workstation ntpdate bind-utils
+
+#ntpdate 172.30.0.2
+
+#vim /etc/krb5.conf
+
+[logging]
+ default = FILE:/var/log/krb5libs.log
+ kdc = FILE:/var/log/krb5kdc.log
+ admin_server = FILE:/var/log/kadmind.log
+
+[libdefaults]
+ default_realm = wscert.com
+ dns_lookup_realm = true
+ dns_lookup_kdc = true
+ ticket_lifetime = 24h
+ renew_lifetime = 7d
+ forwardable = true
+
+[realms]
+ wscert.com = {
+  kdc = dc.wscert.com
+  admin_server = dc.wscert.com
+ }
+
+[domain_realm]
+ .wscert.com = WSCERT.COM
+ wscert.com = WSCERT.COM
+
+#kinit administrator@WSCERT.COM
+#klist
+
+
+
+
+
+
+
+#find / -name smb.conf
+
+#vim /opt/samba/etc/smb.conf
+
+[global]
+workgroup = wscert
+security = ads
+netbios name = squid-proxy
+realm = wscert.com
+winbind uid = 10000-20000
+winbind gid = 10000-20000
+winbind use default domain = yes
+
+
+#cd /opt/samba/bin
+
+#testparm
+
+#net ads join -U Administrator%Websense1
+
+https://wiki.samba.org/index.php/Samba4/InitScript
+
+cd /etc/init.d
+
+touch smb
+chmod +x smb
+vim smb
+
+03.samba-startup.txt
+
+# service smb start
+

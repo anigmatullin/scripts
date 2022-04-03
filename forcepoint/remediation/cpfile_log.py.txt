@@ -1,0 +1,30 @@
+import sys
+
+from DiscoveryIncidentProcessing import MoveDiscoveryIncident
+from DiscoveryIncidentProcessing import GetFilePathFromXML
+
+incident = GetFilePathFromXML(sys.argv[1])
+itype = incident[0]
+filepath = incident[1]
+
+
+try:
+# This tries to open an existing file but creates a new file if necessary.
+	logfile = open("c:/tmp/log.txt", "a")
+	try:
+		logfile.write("\n\nProcessing incident...\n")
+		#logfile.write(itype + "\n")
+		logfile.write(filepath + "\n")
+		logfile.write("Done...\n")
+	finally:
+		logfile.close()
+except IOError:
+	pass
+
+Location = r'c:\tmp'
+DaysKeepActiveFiles = 0
+#---------------------------------------------------------------------
+#DO NOT MODIFYSCRIPT PAST THIS LINE
+
+
+MoveDiscoveryIncident(sys.argv[1],Location,False,DaysKeepActiveFiles,'')

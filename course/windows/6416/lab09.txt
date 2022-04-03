@@ -1,0 +1,59 @@
+Использование AD DS
+
+dc-01  - контроллер домена (windows server 2008 full)
+dc-02  - контроллер домена (windows server 2008 full)
+cl-0l  - рабочая станция в домене (windows vista)
+
+
+
+===========Задание 1. Создание учетных записей ==================================
+
+Выполните задание на dc-01
+
+1. Создайте учетную запись пользователя:
+• Name: Amy Smith
+• Logon: asmith
+• Password: Pa$$w0rd
+
+2. Создайте учетную запись компьютера WRK-001
+
+3. Выполните команду
+>dsadd user "cn=user1, cn=users, dc=int, dc=company, dc=ru" -pwd Pa$$w0rd -upn user1@<domain> -disabled no
+строку "dc=int, dc=company, dc=ru" в команде необходимо изменить в соответствии с вашим доменом.
+
+
+===========Задание 2. Получение информации о ролях FSMO ==================================
+
+Выполните задание на dc-01
+
+1. Запустите Active Directory Users and Computers (Start->Run->dsa.msc)
+2. В левой части консоли, в контекстном меню доменного узла выберите пункт Operations Masters
+3. Просмотрите вкладки Infrastructure, RID Master, PDC Emulator.
+4. Запустите консоль Acrive Directory Domains and Trusts (Start->Run->dsa.msc)
+5. Какой контроллер домена является "Domain Naming Master"
+6. Выполните команду "regsvr32 schmmgmt.dll"
+7. Запустите mmc. Добавьте оснастку "Active Directory Schema".
+8. Какой контроллер домена является "Schema Master"
+
+===========Задание 3. Создание сайтов и добавление подсетей ==================================
+
+Выполните задание на dc-01
+
+1. Запустите "Active Directory Sites and Services"
+2. Добавьте сайты: Msk, Kazan, Samara. При добавлении сайтов выберите "DEFAULTIPSITELINK".
+3. Перенесите контроллер dc-02 в сайт Kazan.
+4. Создайте подсети 192.168.3.0/24 в сайте Msk, 192.168.4.0/24 в сайте Kazan, 192.168.5.0/24 в сайте Samara.
+5. Откройте Inter-site Transports -> IP
+6. Создайте Site-Link "Optical Connection" c сайтами Msk, Kazan, Samara.
+7. Создайте Site-Link "GPRS Connection" c сайтами Msk, Samara. Установите репликацию каждые 24 часа (1440 минут) и стоимость 900.
+8. Отключите параметр "Bridge All Site-Links"
+
+===========Задание 4. Редактирование Групповых Политик ==================================
+
+1. Установите Group Policy Management Console (add feature) 
+2. Запустите Group Policy Management Console.
+3. Запустите редактор политики Default Domain Policy.
+4. Расскройте Computer Configuration | Administrative Templates | Windows Components
+5. Откройте AutoPlay Policies
+6. Отключите автозапуск на всех дисках.
+

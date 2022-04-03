@@ -1,0 +1,88 @@
+
+$ grep -q sse4_2 /proc/cpuinfo && echo "SSE 4.2 supported" || echo "SSE 4.2 not supported"
+
+
+sudo yum -y -q install yum-utils
+sudo rpm --import https://repo.yandex.ru/clickhouse/CLICKHOUSE-KEY.GPG
+sudo yum-config-manager --add-repo https://repo.yandex.ru/clickhouse/rpm/stable/x86_64
+
+sudo yum install clickhouse-server clickhouse-client
+sudo service clickhouse-server start
+
+$ clickhouse-client
+
+
+create table logs (
+	id int,
+	event_timestamp datetime, -- FROM_UNIXTIME(1299762201428)
+    event_date date,
+	accountid int,
+	user      String, 
+	clientip  String,
+	RequestCount int,
+	RequestSize int,
+	ResponseSize int,
+	Disposition_code int,
+	categories String,
+	protocol int,
+	Port int,
+	DestinationIP String,
+	URL String,
+	AnalyticID int,
+	ReasonCode int,
+	NotUsed int,
+	ReasonString String,
+	FileType String,
+	PolicyName String,
+	ContentType String,
+	RemoteHost String,
+	Method String,
+	ProxyTime int,
+	OriginTime int,
+	ResponseTime int
+)
+ENGINE = MergeTree(event_date, id, 8192);
+
+
+CREATE TABLE names
+(
+    `id` int,
+    `name` varchar(16),
+    `insert_date` Date
+)
+ENGINE = MergeTree(insert_date, id, 8192);
+
+
+create table logs (
+	id int,
+	timestamp datetime, -- FROM_UNIXTIME(1299762201428)
+	accountid int,
+	user      varchar(255), 
+	clientip  varchar(16),
+	RequestCount int,
+	RequestSize int,
+	ResponseSize int,
+	Disposition_code int,
+	categories varchar(30),
+	protocol int,
+	Port int,
+	DestinationIP varchar(16),
+	URL varchar(4096),
+	AnalyticID int,
+	ReasonCode int,
+	NotUsed int,
+	ReasonString varchar(255),
+	FileType varchar(255),
+	PolicyName varchar(255),
+	ContentType varchar(255),
+	RemoteHost varchar(255),
+	Method varchar(20),
+	ProxyTime int,
+	OriginTime int,
+	ResponseTime int
+)
+ENGINE = MergeTree(timestamp, id, 8192);
+
+-- select max(id) from logs
+$max++;
+insert

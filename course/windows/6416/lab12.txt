@@ -1,0 +1,45 @@
+1. Set Audit Policy using gpmc.msc
+
+Set success and failure audit in Directory Service Access category
+
+2. Enable subcategories audit using auditpol
+
+auditpol /get /category:*
+auditpol /set /subcategory:"Directory Service Changes"               /success:enable /failure:enable
+auditpol /set /subcategory:"Directory Service Replication"           /success:enable /failure:enable
+auditpol /set /subcategory:"Detailed Directory Service Replication"  /success:enable /failure:enable
+auditpol /set /subcategory:"Directory Service Access"                /success:enable /failure:enable
+
+
+3. Set SACL in dsa.msc
+
+Open Active Directory Users and Computers.
+Set audit for "Write all properties" for Authenticated Users
+
+3. Create User
+
+dsadd ...
+
+
+4. Modify User Properties
+
+dsmod ...
+
+5. Move User object to another OU
+
+dsmod ...
+
+6. Delete User
+
+dsrm user
+
+7. View security event log
+
+View Directory Service Changes category
+For each change there are two events:
+-delete attribute with old value
+-add attribute with new value
+
+wevtutil qe Application /f:text /c:10
+
+also use powershell

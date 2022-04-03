@@ -1,0 +1,29 @@
+#!/bin/sh
+
+# Contains the "killproc" function on Red Hat Linux
+. /etc/init.d/functions
+
+PATH="/opt/samba/sbin:$PATH"
+
+case $1 in
+        'start')
+                echo "Starting smbd..."
+                smbd -D
+                echo "Starting nmbd..."
+                nmbd -D
+                echo "Staring winbind"
+                winbindd -D
+                ;;
+        'stop')
+                echo "Stopping smbd and nmbd..."
+                killproc smbd
+                killproc nmbd
+                killproc winbindd
+                rm -f /opt/samba/var/locks/smbd.pid
+                rm -f /opt/samba/var/locks/nmbd.pid
+                rm -f /opt/samba/var/locks/winbind.pid
+                ;;
+        *)
+                echo "usage: smb {start|stop}"
+                ;;
+esac

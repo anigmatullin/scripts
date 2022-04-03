@@ -1,0 +1,38 @@
+
+УПРАВЛЕНИЕ DNS СЕРВЕРОМ.
+
+dc-01  - контроллер домена (windows server 2008 full)
+cl-0l  - рабочая станция в домене (windows vista)
+
+
+===========Задание 1. Создание dns-зон ==================================
+
+Выполните задание на dc-01
+
+1. Выполните следующие команды
+
+dnscmd localhost /ZoneAdd hr.contoso.com /Primary /file hr.contoso.com.dns
+
+dnscmd localhost /ZoneAdd 1.168.192.in-addr.arpa /Primary /file 1.168.192.in-addr.arpa.dns
+
+dnscmd localhost /RecordAdd hr.contoso.com dc-01  A 192.168.1.1
+
+dnscmd localhost /RecordAdd 1.168.192.in-addr.arpa 1 PTR dc-01.hr.contoso.com
+
+2. Работа в консоли DNS.
+
+ - Откройте консоль DNS. (Start->Run->dnsmgmt.msc)
+ - Удостоверьтесь, что созданны зоны hr.contoso.com и 1.168.192.in-addr.arpa.
+ - Удостоверьтесь, что созданны записи A (HOST), PTR
+ - Создайте запись cl-01.hr.contoso.com для cl-01. При этом укажите опцию создания обратной записи.
+ - Создайте CNAME запись ftp.hr.contoso.com, указывающую на cl-01.hr.contoso.com
+
+ 3. Настройка передачи зон.
+
+ - Откройте свойства зоны hr.contoso.com, вкладку "Zone Transfer".
+ - Удостоверьтесь, что передача зоны разрешена.
+
+
+=========== Финализация ==================================
+
+Выключите dc-01, cl-01 без сохранения изменений.

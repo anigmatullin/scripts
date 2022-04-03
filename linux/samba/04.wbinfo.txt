@@ -1,0 +1,7 @@
+wbinfo -p
+wbinfo -P
+wbinfo --dsgetdcname=wscert.com
+wbinfo -t
+./wbinfo --dc-info=wscert.com
+wbinfo -u
+wbinfo -g
