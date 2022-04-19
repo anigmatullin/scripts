@@ -2,6 +2,7 @@ import * as fs from 'fs/promises';
 import * as fsm from 'fs';
 import { createReadStream, createWriteStream } from 'fs';
 
+type PromiseFactory = (data: any) => Promise<any>;
 
 function readStream(stream: fsm.ReadStream) {
 
@@ -17,19 +18,62 @@ function readStream(stream: fsm.ReadStream) {
 function writeStream(stream: fsm.WriteStream, data: any) {
 
     return new Promise((resolve, reject) => {
+
+        let converted = data.toString();
         
         stream.on("error", error => reject(error));
 
-        stream.write(data, () => {
+        stream.write(converted, () => {
             stream.end();
-            resolve(data);
+            resolve(converted);
         });
     });
 }
 
-function pipePromise(r: fsm.ReadStream, w:fsm.WriteStream) {
-    let p = readStream(r).then((data) => writeStream(w, data) );
+function demoPromise(buff: any) {
+
+    let p = new Promise((resolve, reject) => {
+
+        let data = buff.toString();
+        let obj = {
+            len: data.length,
+            raw: data
+        };
+        console.log(obj);
+        resolve(obj);
+
+    });
+
     return p;
+}
+
+async function pipePromise(r: fsm.ReadStream, w:fsm.WriteStream, filter: PromiseFactory) {
+    let data = await readStream(r);
+
+    let promise = filter(data);
+    promise.then((data) => writeStream(w, data) );
+    return promise;
+
+    // let pr = readStream(r).then((data) => writeStream(w, data) );
+    // return pr;
+}
+
+async function process(r: fsm.ReadStream, w:fsm.WriteStream) {
+
+    let promise = readStream(r)
+    .then( data => {
+        let obj = {
+            len: String(data).length,
+            raw: data
+        };
+        console.log(obj);
+        return obj;
+    })
+    .then( data => JSON.stringify(data, null, 2))
+    .then( data => JSON.parse(data))
+    .then( data => data.raw)
+    .then( data => writeStream(w, data) );
+    return promise;
 }
 
 function pipeStream(r: fsm.ReadStream, w:fsm.WriteStream) {
@@ -43,9 +87,9 @@ function pipeStream(r: fsm.ReadStream, w:fsm.WriteStream) {
     });
 }
 
-let r = createReadStream('test.txt');
-let w = createWriteStream('new.txt');
+let r = createReadStream('test.eml');
+let w = createWriteStream('filtered.eml');
 
-let p = pipePromise(r, w)
+let p = process(r, w)
 .then(data => console.log(data))
 .catch( err => console.log(err))
