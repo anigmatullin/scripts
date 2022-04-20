@@ -2,6 +2,8 @@ import * as fs from 'fs/promises';
 import * as fsm from 'fs';
 import { createReadStream, createWriteStream } from 'fs';
 
+import * as mailparser from 'mailparser';
+
 type PromiseFactory = (data: any) => Promise<any>;
 
 function readStream(stream: fsm.ReadStream) {
@@ -76,6 +78,30 @@ async function process(r: fsm.ReadStream, w:fsm.WriteStream) {
     return promise;
 }
 
+
+async function processEmail(r: fsm.ReadStream, w:fsm.WriteStream) {
+
+    let buff = await readStream(r);
+    let eml = String(buff);
+    let options = {};
+
+    let promise = mailparser.simpleParser(eml, options)
+    .then(parsed => {
+        console.log(parsed);
+        let ret = {
+            eml: eml,
+            parsed: parsed,
+            size: eml.length
+        };
+        return ret;
+    })
+    // .then( data => JSON.stringify(data, null, 2))
+    .then( data => data.eml)
+    .then( data => writeStream(w, data) );
+
+    return promise;
+}
+
 function pipeStream(r: fsm.ReadStream, w:fsm.WriteStream) {
 
     return new Promise((resolve, reject) => {
@@ -90,6 +116,6 @@ function pipeStream(r: fsm.ReadStream, w:fsm.WriteStream) {
 let r = createReadStream('test.eml');
 let w = createWriteStream('filtered.eml');
 
-let p = process(r, w)
+let p = processEmail(r, w)
 .then(data => console.log(data))
 .catch( err => console.log(err))
