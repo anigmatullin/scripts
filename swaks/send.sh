@@ -1,7 +1,7 @@
 #!/bin/bash
 
 FILES=$1/*.txt
-SRV=192.168.35.131
+SRV=localhost:2525
 
 for f in $FILES
 do
