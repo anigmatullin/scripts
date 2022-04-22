@@ -1,3 +1,2 @@
 
-bash send.sh ~/samples
-
+bash send.sh ~/sa
