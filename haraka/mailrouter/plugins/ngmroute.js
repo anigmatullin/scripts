@@ -66,11 +66,11 @@ exports.hook_get_mx = function (next, hmail, domain) {
 
     if (internalDomains.includes(domain)) {
         relay = [relay_internal];
-        msg = `${dt} ${domain}: internal\n`;
+        msg = `${dt} ${domain}: internal`;
     }
     else {
         relay = [relay_default];
-        msg = `${dt} ${domain}: external\n`;
+        msg = `${dt} ${domain}: external`;
     }
 
     log(msg);
@@ -81,22 +81,22 @@ exports.hook_get_mx = function (next, hmail, domain) {
 
 exports.hook_delivered = function (next, hmail, params) {
 
-    log("some delivered\n");
-    this.lognotice("some delivered\n");
+    log("some delivered");
+    this.lognotice("some delivered");
     return next();
 }
 
 exports.register = function() {
 
-    log("regsitering hooks\n");
-    this.lognotice("regsitering hooks\n");
+    log("regsitering hooks");
+    this.lognotice("regsitering hooks");
     this.register_hook('delivered', 'hook_delivered');
 };
 
 
 function log(msg)
 {
-    fs.appendFile(logfile, msg, err => {
+    fs.appendFile(logfile, msg + "\n", err => {
         if (err) {
         }
         //file written successfully
