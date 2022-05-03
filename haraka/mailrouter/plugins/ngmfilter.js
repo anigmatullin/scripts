@@ -71,10 +71,6 @@ exports.hook_connect = function (next, connection)
 
 exports.hook_rcpt = function (next, connection, params)
 {
-    log("mail from:");
-    jsonlog(connection.transaction.mail_from);
-
-
     if (Array.isArray(params)) {
         
         params.forEach(rcpt => {
@@ -91,13 +87,29 @@ exports.hook_rcpt = function (next, connection, params)
     // return next();
 };
 
-
-exports.register = function()
+exports.hook_queue_outbound = function(next, connection)
 {
-    this.lognotice("registering hooks");
-    this.register_hook('connect', 'hook_connect');
-    this.register_hook('rcpt', 'hook_rcpt');
-};
+    log("hook_queue_outbound: " + connection.transaction.uuid);
+
+    jsonlog(connection.transaction.rcpt_to);
+
+    return next(CONT);
+}
+
+
+exports.hook_send_email = function(next, hmail)
+{
+    log("send mail: " + hmail.todo.uuid + " to: " + hmail.todo.rcpt_to[0].original);
+    // jsonlog(hmail.todo.rcpt_to[0]);
+    return next(DENY);
+}
+
+// exports.register = function()
+// {
+//     this.lognotice("registering hooks");
+//     this.register_hook('connect', 'hook_connect');
+//     this.register_hook('rcpt', 'hook_rcpt');
+// };
 
 
 function log(msg)

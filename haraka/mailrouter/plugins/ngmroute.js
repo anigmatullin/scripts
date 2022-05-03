@@ -56,6 +56,12 @@ let relay_default = {
 };
 
 exports.hook_get_mx = function (next, hmail, domain) {
+    
+    const cfg = this.config.get('routing.json', 'json');
+
+    jsonlog(cfg.relays);
+
+    jsonlog(cfg.routes);
 
     let relay;
     let dt = new Date().toISOString();
@@ -86,12 +92,12 @@ exports.hook_delivered = function (next, hmail, params) {
     return next();
 }
 
-exports.register = function() {
+// exports.register = function() {
 
-    log("regsitering hooks");
-    this.lognotice("regsitering hooks");
-    this.register_hook('delivered', 'hook_delivered');
-};
+//     log("regsitering hooks");
+//     this.lognotice("regsitering hooks");
+//     this.register_hook('delivered', 'hook_delivered');
+// };
 
 
 function log(msg)
@@ -102,3 +108,28 @@ function log(msg)
         //file written successfully
     });    
 }
+
+function censor(censor) {
+    var i = 0;
+    
+    return function(key, value) {
+      if(i !== 0 && typeof(censor) === 'object' && typeof(value) == 'object' && censor == value) 
+        return '[Circular]'; 
+      
+      if(i >= 29) // seems to be a harded maximum of 30 serialized objects?
+        return '[Unknown]';
+      
+      ++i; // so we know we aren't using the original object anymore
+      
+      return value;  
+    }
+}
+
+
+function jsonlog(obj)
+{
+    let str = JSON.stringify(obj, censor(obj));
+    log(str);
+    return str;
+}
+

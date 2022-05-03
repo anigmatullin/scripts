@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "Haraka": "^2.8.28"
+    "Haraka": "^2.8.28",
+    "mimelib": "^0.3.1"
   }
 }

@@ -1,0 +1,59 @@
+{
+"relays": [
+        {
+            "name": "Exch",
+            "auth_user": "",
+            "auth_pass": "",
+            "priority": 0,
+            "exchange": "127.0.0.1",
+            "port": 2526
+        },
+
+        {
+            "name": "Branch",
+            "auth_user": "",
+            "auth_pass": "",
+            "priority": 0,
+            "exchange": "127.0.0.1",
+            "port": 2525
+        },
+
+        {
+            "name": "Outbound",
+            "auth_user": "",
+            "auth_pass": "",
+            "priority": 0,
+            "exchange": "127.0.0.1",
+            "port": 2525
+        }
+    ],
+
+"routes": [
+        {
+            "routename": "To Exchange",
+            "sender": "",
+            "sender_domain": "",
+            "rcpt": "",
+            "rcpt_domain": "ngm.dev",
+            "relay": "Exch"
+        },
+
+        {
+            "routename": "Branch",
+            "sender": "",
+            "sender_domain": "",
+            "rcpt": "",
+            "rcpt_domain": "branch.com",
+            "relay": "Branch"
+        },
+
+        {
+            "routename": "Default",
+            "sender": "",
+            "sender_domain": "",
+            "rcpt": "",
+            "rcpt_domain": "",
+            "relay": "Outbound"
+        }
+    ]
+}
