@@ -1,8 +1,7 @@
-const mimelib = require('mimelib');
 const fs = require('fs');
-const { runInThisContext } = require('vm');
 
-const cfgfile = '../config/routing.json';
+const cfgrouting = '../config/routing.json';
+const cfgrelays  = '../config/relays.json';
 
 function showUsageExit()
 {
@@ -21,15 +20,35 @@ function getDomain(addr)
 }
 
 
-function getRelays(cfg_relays)
+function getRelays(path)
 {
-    let relays = new Map();
+    let jsoncfg = fs.readFileSync(path);
+    let cfg_relays = JSON.parse(jsoncfg);
 
-    cfg_relays.forEach(obj => {
-        relays.set(obj.name, obj);
+    return cfg_relays;
+
+    // let relays = new Map();
+
+    // cfg_relays.forEach(obj => {
+    //     relays.set(obj.name, obj);
+    // });
+
+    // return relays;
+}
+
+function getRoutes(path)
+{
+    let jsoncfg = fs.readFileSync(path);
+    let cfg = JSON.parse(jsoncfg);
+
+    let routes = new Array();
+
+    cfg.forEach(param => {
+        let route = new Route(param.relay, param.sender, param.sender_domain, param.rcpt, param.rcpt_domain);
+        routes.push(route);
     });
 
-    return relays;
+    return routes;
 }
 
 
@@ -118,31 +137,21 @@ class RoutingTable
             return false;
         }
 
-        let routename = foundRoute.relay;
-        let foundRelay = relays.get(routename);
+        let relayname = foundRoute.relay;
+        let relayexists = relayname in relays;
 
-        return foundRelay;
+        if (!relayexists) {
+            console.error("Configuration Error!");
+            console.error(`Relay "${relayname}" defined in Routing \nBut cannot be found among relays \nPlease review configuration!\n`);
+            return false;
+        }
+        else {
+            let foundRelay = relays[relayname];
+            return foundRelay;
+        }
     }
 }
 
-
-function getRoutes()
-{
-    let routes = new Array();
-
-    cfg.routes.forEach(param => {
-        let route = new Route(param.relay, param.sender, param.sender_domain, param.rcpt, param.rcpt_domain);
-        routes.push(route);
-    });
-
-    return routes;
-}
-
-function getConfig(path)
-{
-    let jsoncfg = fs.readFileSync(path);
-    return JSON.parse(jsoncfg);
-}
 
 
 //params: sender rcpt
@@ -160,11 +169,15 @@ if (!rcpt) {
 }
 
 
-
-let cfg = getConfig(cfgfile);
-let relays = getRelays(cfg.relays);
-let routes = getRoutes(cfg.routes);
+// let cfg = getConfig(cfgrouting);
+let relays = getRelays(cfgrelays);
+let routes = getRoutes(cfgrouting);
 let rtable = new RoutingTable(relays, routes);
+
+// console.log(relays);
+// console.log(routes);
+// console.log(rtable);
+// process.exit();
 
 let relay = rtable.findRoute(sender, rcpt);
 
