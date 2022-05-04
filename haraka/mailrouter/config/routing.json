@@ -13,7 +13,7 @@
         "sender": "",
         "sender_domain": "",
         "rcpt": "",
-        "rcpt_domain": "branch.com",
+        "rcpt_domain": "branch1.com",
         "relay": "Branch"
     },
 

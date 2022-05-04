@@ -1,15 +1,26 @@
-
 const fs = require('fs');
 
 const logfile = '/tmp/haraka/haraka.log';
+const cfgrouting = 'routing.json';
+const cfgrelays  = 'relays.json';
 
-/*
+let relays;
+let routes;
+let rtable;
+
+
+/**
+ *
+
++ use haraka way to load configs
+- how do we find out actual rcpt addr among list of rcpt?
+- log to web service
+
+getAddr(hmail.todo.mail_from)
+getAddr(hmail.todo.rcpt_to[0])
 
 hmail.todo:
 
-{
-  "queue_time": 1650968046031,
-  "domain": "localhost",
   "rcpt_to": [
     {
       "original": "<addr@localhost>",
@@ -23,63 +34,18 @@ hmail.todo:
     "original_host": "test.com",
     "host": "test.com",
     "user": "addr"
-  },
-  "notes": {
-    "skip_plugins": [],
-    "authentication_results": []
-  },
-  "uuid": "FD17BAC6-3692-41C8-B01A-2ED069D3CCD3.1.1"
-}
+  }
+
+ */
 
 
-*/
+exports.hook_get_mx = function (next, hmail, domain)
+{
+    let sender = getAddr(hmail.todo.mail_from);
+    let rcpt = getAddr(hmail.todo.rcpt_to[0]);
+    let relay = rtable.findRoute(sender, rcpt);
 
-let internalDomains = [
-    'ngm.dev',
-    'localdomain'
-];
-
-let relay_internal = {
-    // auth_user: '',
-    // auth_pass: '',
-    priority: 0,
-    exchange: '127.0.0.1',
-    port: 2527,
-};
-
-let relay_default = {
-    // auth_user: '',
-    // auth_pass: '',
-    priority: 0,
-    exchange: '127.0.0.1',
-    port: 2526,
-};
-
-exports.hook_get_mx = function (next, hmail, domain) {
-    
-    const cfg = this.config.get('routing.json', 'json');
-
-    jsonlog(cfg.relays);
-
-    jsonlog(cfg.routes);
-
-    let relay;
-    let dt = new Date().toISOString();
-    let msg = "";
-
-    //if domain is in internal -- return relay_internal
-    //otherwise -- return relay_default
-
-    if (internalDomains.includes(domain)) {
-        relay = [relay_internal];
-        msg = `${dt} ${domain}: internal`;
-    }
-    else {
-        relay = [relay_default];
-        msg = `${dt} ${domain}: external`;
-    }
-
-    log(msg);
+    jsonlog(relay);
 
     return next(OK, relay);
 }
@@ -87,18 +53,24 @@ exports.hook_get_mx = function (next, hmail, domain) {
 
 exports.hook_delivered = function (next, hmail, params) {
 
-    log("some delivered");
-    this.lognotice("some delivered");
     return next();
 }
 
-// exports.register = function() {
+exports.register = function()
+{
+    relays = exports.getRelays(cfgrelays);
+    routes = exports.getRoutes(cfgrouting);
+    rtable = new RoutingTable(relays, routes);
 
-//     log("regsitering hooks");
-//     this.lognotice("regsitering hooks");
-//     this.register_hook('delivered', 'hook_delivered');
-// };
+    // this.register_hook('delivered', 'hook_delivered');
+};
 
+
+function getAddr(addr)
+{
+    let res = addr.user + "@" + addr.host;
+    return res;
+}
 
 function log(msg)
 {
@@ -133,3 +105,132 @@ function jsonlog(obj)
     return str;
 }
 
+
+function getDomain(addr)
+{
+    let domain = addr.substring(addr.lastIndexOf('@') + 1);
+    return domain;
+}
+
+
+exports.getRelays = function (path)
+{
+    let relays = this.config.get(path, 'json');
+    return relays;
+}
+
+exports.getRoutes = function (path)
+{
+    let cfgobj = this.config.get(path, 'json');
+    let cfg = Object.values(cfgobj);
+
+    let routes = new Array();
+
+    cfg.forEach(param => {
+        let route = new Route(param.relay, param.sender, param.sender_domain, param.rcpt, param.rcpt_domain);
+        routes.push(route);
+    });
+
+    return routes;
+}
+
+
+class Route
+{
+    //should have a constructor
+    //and 4 variables of function type
+    //variables are created in consctructor
+    //based on route details.
+    //if predicate is falsy - it means it is not checked and the corresponding funciton just returns true
+    //if predicate is true - create function which check the predicate
+
+    relay = "";
+    checkSender;
+    checkSenderDomain;
+    checkRcpt;
+    checkRcptDomain;
+
+    match(sender, rcpt)
+    {
+        let senderdomain = getDomain(sender);
+        let rcptdomain = getDomain(rcpt);
+
+        let res = this.checkSender(sender) &&
+                this.checkSenderDomain(senderdomain) &&
+                this.checkRcpt(rcpt) &&
+                this.checkRcptDomain(rcptdomain);
+        
+        return res;
+    }
+
+    getCheckerFunction(param)
+    {
+        param = param.toString();
+
+        if (param) {
+            return function(val) {
+                if (val == param) {
+                    return true;
+                }
+                return false;
+            }
+        }
+        else {
+            return function(val) {
+                return true;
+            }            
+        }
+    }
+
+    constructor(relay, sender, sender_domain, rcpt, rcpt_domain)
+    {
+        this.relay = relay;
+        this.checkSender = this.getCheckerFunction(sender);
+        this.checkSenderDomain = this.getCheckerFunction(sender_domain);
+        this.checkRcpt = this.getCheckerFunction(rcpt);
+        this.checkRcptDomain = this.getCheckerFunction(rcpt_domain);
+    }
+}
+
+/////////////////////////////
+
+class RoutingTable
+{
+    routes = [];
+    relays = [];
+
+    constructor(relays, routes)
+    {
+        this.relays = relays;
+        this.routes = routes;
+    }
+
+
+    findRoute(sender, rcpt)
+    {
+        function findFn(route)
+        {
+            let matched = route.match(sender, rcpt);
+            return matched;
+        };
+
+        let foundRoute = routes.find(findFn);
+
+        if (!foundRoute) {
+            return false;
+        }
+
+        let relayname = foundRoute.relay;
+        let relayexists = relayname in relays;
+
+        if (!relayexists) {
+            console.error("Configuration Error!");
+            console.error(`Relay "${relayname}" defined in Routing \nBut cannot be found among relays \nPlease review configuration!\n`);
+            return false;
+        }
+        else {
+            let foundRelay = relays[relayname];
+            return foundRelay;
+        }
+    }
+}
