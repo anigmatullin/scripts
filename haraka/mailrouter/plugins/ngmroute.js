@@ -1,8 +1,10 @@
 const fs = require('fs');
+const fetch = require("node-fetch");
 
 const logfile = '/tmp/haraka/haraka.log';
 const cfgrouting = 'routing.json';
 const cfgrelays  = 'relays.json';
+const logurl = "http://localhost:3000/log";
 
 let relays;
 let routes;
@@ -38,6 +40,21 @@ hmail.todo:
 
  */
 
+function httplog(obj)
+{
+    let jsondata = JSON.stringify(obj);
+
+    let req = {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: jsondata
+    };
+
+    return fetch(logurl, req);
+}
 
 exports.hook_get_mx = function (next, hmail, domain)
 {
@@ -45,13 +62,47 @@ exports.hook_get_mx = function (next, hmail, domain)
     let rcpt = getAddr(hmail.todo.rcpt_to[0]);
     let relay = rtable.findRoute(sender, rcpt);
 
-    jsonlog(relay);
+    // httplog(hmail.todo);
+    // httplog(relay);
 
     return next(OK, relay);
 }
 
 
 exports.hook_delivered = function (next, hmail, params) {
+
+    let host = params[0];
+    let ip = params[1];
+    let response = params[2];
+    let delay = params[3];
+    let port = params[4];
+    let mode = params[5];
+    let ok_recips = params[6];
+    let secured = params[7];
+    let authenticated = params[8];
+
+    let logdata = {
+        uuid: hmail.todo.uuid,
+        dt: hmail.todo.queue_time,
+        from: getAddr(hmail.todo.mail_from),
+        rcpt_domain: hmail.todo.domain,
+        rcpt_list: getAddrList(hmail.todo.rcpt_to),
+        rcpt_accepted: getAddrList(ok_recips),
+        tls_forced: hmail.force_tls,
+        tls: secured,
+        auth: authenticated,
+        // todo: hmail.todo,
+        host: host,
+        ip: ip,
+        port: port,
+        response: response,
+        delay: delay,
+        // params: params
+    }
+
+    httplog(logdata);
+    // httplog(JSON.stringify("+++++++++++++++++++++++++"))
+    // httplog(params);
 
     return next();
 }
@@ -69,6 +120,21 @@ exports.register = function()
 function getAddr(addr)
 {
     let res = addr.user + "@" + addr.host;
+    return res;
+}
+
+function getAddrList(arr)
+{
+    let res = ""
+    arr.forEach(addr =>{
+        if (!res) {
+            res += getAddr(addr);
+        }
+        else {
+            res += "," + getAddr(addr);
+        }
+    });
+
     return res;
 }
 

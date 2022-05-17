@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <link rel="stylesheet" href="/lib/w2ui-1.5.css">
+
+    <script src="/lib/jquery-3.6.js"></script>
+    <script src="/lib/w2ui-1.5.min.js"></script>
+</head>
+<body>
+    <h3>Contacts</h3>
+
+    <div id="contacts" style="height: 600px;"></div>
+
+<script type="text/javascript">
+
+    $(function () {
+        $('#contacts').w2grid({
+            name: 'contacts-grid',
+            url: 'data/contacts.json',
+            method: 'GET', // need this to avoid 412 error on Safari
+
+            show: {
+                header: true,
+                footer: true,
+                toolbar: true,
+                lineNumbers: true
+            },
+
+            searches: [
+                { type: 'int',  field: 'recid', label: 'ID' },
+                { type: 'text', field: 'fname', label: 'First Name' },
+                { type: 'text', field: 'lname', label: 'Last Name' },
+                { type: 'text', field: 'email', label: 'Email' },
+            ],
+
+            columns: [
+                { field: 'fname', text: 'First Name', size: '30%' },
+                { field: 'lname', text: 'Last Name', size: '30%' },
+                { field: 'email', text: 'Email', size: '40%' }
+            ]
+        });
+    });
+</script>
+
+</body>
+</html>

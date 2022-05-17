@@ -1,0 +1,7 @@
+{
+    "total": 2,
+    "records": [
+        { "recid": 1, "fname": "Aibulat", "lname": "Nigmatullin", "email": "nigmatullin@gmail.com" },
+        { "recid": 2, "fname": "Yulai", "lname": "Nigmatullin", "email": "ngmYulai@gmail.com"}
+    ]
+}
