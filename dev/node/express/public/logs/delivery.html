@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <link rel="stylesheet" href="/lib/w2ui-1.5.css">
+
+    <script src="/lib/jquery-3.6.js"></script>
+    <script src="/lib/w2ui-1.5.min.js"></script>
+</head>
+<body>
+    <h3>Delivery</h3>
+
+    <div id="grid" style="height: 600px;"></div>
+
+<script type="text/javascript">
+
+    $(function () {
+        $('#grid').w2grid({
+            name: 'grid',
+            url: '/api/delivery',
+            method: 'GET', // need this to avoid 412 error on Safari
+            multiSearch: false,
+
+            show: {
+                header: true,
+                footer: true,
+                toolbar: true,
+                lineNumbers: true
+            },
+
+            searches: [
+                // { type: 'int',  field: 'recid', label: 'ID' },
+                { type: 'text', field: 'from', label: 'Sender' },
+                { type: 'text', field: 'rcpt_list', label: 'Recipients' },
+                { type: 'text', field: 'rcpt_domain', label: 'Rcpt Domain'},
+                { type: 'text', field: 'rcpt_accepted', label: 'Rcpt Accepted'},
+                { type: 'text', field: 'tls_forced', label: 'TLS Enforced'},
+                { type: 'text', field: 'tls', label: 'TLS'},
+                { type: 'text', field: 'auth', label: 'Auth'},
+                { type: 'text', field: 'host', label: 'Host'},
+                { type: 'text', field: 'ip', label: 'IP'},
+                { type: 'text', field: 'port', label: 'Port'},
+                { type: 'text', field: 'response', label: 'Reponse'},
+                { type: 'text', field: 'delay', label: 'Delay'},   
+            ],
+
+            columns: [
+                { field: 'dt', text: 'DT' },
+                { field: 'uuid', text: 'UUID' },
+
+                { field: 'from', text: 'Sender'},
+                { field: 'rcpt_list', text: 'Rcpt' },
+
+                // { field: 'dt', text: 'DT', size: '30%' },
+
+                { field: 'rcpt_domain', text: 'Rcpt Domain'},
+                { field: 'rcpt_accepted', text: 'Rcpt Accepted'},
+                { field: 'tls_forced', text: 'TLS Enforced'},
+                { field: 'tls', text: 'TLS'},
+                { field: 'auth', text: 'Auth'},
+                { field: 'host', text: 'Host'},
+                { field: 'ip', text: 'IP'},
+                { field: 'port', text: 'Port'},
+                { field: 'response', text: 'Reponse'},
+                { field: 'delay', text: 'Delay'},
+
+            ]
+        });
+
+        w2ui.grid.hideColumn('uuid');
+        w2ui.grid.hideColumn('rcpt_domain');
+        w2ui.grid.hideColumn('rcpt_accepted');
+        w2ui.grid.hideColumn('tls_forced');
+        w2ui.grid.hideColumn('tls');
+        w2ui.grid.hideColumn('auth');
+        w2ui.grid.hideColumn('delay');
+    });
+</script>
+
+</body>
+</html>

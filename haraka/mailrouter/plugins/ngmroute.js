@@ -1,10 +1,19 @@
 const fs = require('fs');
 const fetch = require("node-fetch");
 
+const functions = require("./functions");
+
 const logfile = '/tmp/haraka/haraka.log';
 const cfgrouting = 'routing.json';
 const cfgrelays  = 'relays.json';
-const logurl = "http://localhost:3000/log";
+
+const url_delivery = "http://localhost:3000/api/delivery";
+const url_conn = "http://localhost:3000/api/connection";
+
+const Route = require('./Route');
+const RoutingTable = require('./RoutingTable');
+
+// import { RoutingTable } from './RoutingTable';
 
 let relays;
 let routes;
@@ -40,32 +49,26 @@ hmail.todo:
 
  */
 
-function httplog(obj)
-{
-    let jsondata = JSON.stringify(obj);
-
-    let req = {
-        method: 'POST',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-        body: jsondata
-    };
-
-    return fetch(logurl, req);
-}
 
 exports.hook_get_mx = function (next, hmail, domain)
 {
-    let sender = getAddr(hmail.todo.mail_from);
-    let rcpt = getAddr(hmail.todo.rcpt_to[0]);
+    let sender = functions.getAddr(hmail.todo.mail_from);
+    let rcpt = functions.getAddr(hmail.todo.rcpt_to[0]);
     let relay = rtable.findRoute(sender, rcpt);
 
     // httplog(hmail.todo);
     // httplog(relay);
 
     return next(OK, relay);
+}
+
+exports.hook_connect = function (next, connection)
+{
+    connection.relaying = true;
+
+    //prepare logging object from connection object!
+    functions.httplog(connection, url_conn);
+    return next(CONT);
 }
 
 
@@ -84,10 +87,10 @@ exports.hook_delivered = function (next, hmail, params) {
     let logdata = {
         uuid: hmail.todo.uuid,
         dt: hmail.todo.queue_time,
-        from: getAddr(hmail.todo.mail_from),
+        from: functions.getAddr(hmail.todo.mail_from),
         rcpt_domain: hmail.todo.domain,
-        rcpt_list: getAddrList(hmail.todo.rcpt_to),
-        rcpt_accepted: getAddrList(ok_recips),
+        rcpt_list: functions.getAddrList(hmail.todo.rcpt_to),
+        rcpt_accepted: functions.getAddrList(ok_recips),
         tls_forced: hmail.force_tls,
         tls: secured,
         auth: authenticated,
@@ -100,7 +103,7 @@ exports.hook_delivered = function (next, hmail, params) {
         // params: params
     }
 
-    httplog(logdata);
+    functions.httplog(logdata, url_delivery);
     // httplog(JSON.stringify("+++++++++++++++++++++++++"))
     // httplog(params);
 
@@ -115,68 +118,6 @@ exports.register = function()
 
     // this.register_hook('delivered', 'hook_delivered');
 };
-
-
-function getAddr(addr)
-{
-    let res = addr.user + "@" + addr.host;
-    return res;
-}
-
-function getAddrList(arr)
-{
-    let res = ""
-    arr.forEach(addr =>{
-        if (!res) {
-            res += getAddr(addr);
-        }
-        else {
-            res += "," + getAddr(addr);
-        }
-    });
-
-    return res;
-}
-
-function log(msg)
-{
-    fs.appendFile(logfile, msg + "\n", err => {
-        if (err) {
-        }
-        //file written successfully
-    });    
-}
-
-function censor(censor) {
-    var i = 0;
-    
-    return function(key, value) {
-      if(i !== 0 && typeof(censor) === 'object' && typeof(value) == 'object' && censor == value) 
-        return '[Circular]'; 
-      
-      if(i >= 29) // seems to be a harded maximum of 30 serialized objects?
-        return '[Unknown]';
-      
-      ++i; // so we know we aren't using the original object anymore
-      
-      return value;  
-    }
-}
-
-
-function jsonlog(obj)
-{
-    let str = JSON.stringify(obj, censor(obj));
-    log(str);
-    return str;
-}
-
-
-function getDomain(addr)
-{
-    let domain = addr.substring(addr.lastIndexOf('@') + 1);
-    return domain;
-}
 
 
 exports.getRelays = function (path)
@@ -198,105 +139,4 @@ exports.getRoutes = function (path)
     });
 
     return routes;
-}
-
-
-class Route
-{
-    //should have a constructor
-    //and 4 variables of function type
-    //variables are created in consctructor
-    //based on route details.
-    //if predicate is falsy - it means it is not checked and the corresponding funciton just returns true
-    //if predicate is true - create function which check the predicate
-
-    relay = "";
-    checkSender;
-    checkSenderDomain;
-    checkRcpt;
-    checkRcptDomain;
-
-    match(sender, rcpt)
-    {
-        let senderdomain = getDomain(sender);
-        let rcptdomain = getDomain(rcpt);
-
-        let res = this.checkSender(sender) &&
-                this.checkSenderDomain(senderdomain) &&
-                this.checkRcpt(rcpt) &&
-                this.checkRcptDomain(rcptdomain);
-        
-        return res;
-    }
-
-    getCheckerFunction(param)
-    {
-        param = param.toString();
-
-        if (param) {
-            return function(val) {
-                if (val == param) {
-                    return true;
-                }
-                return false;
-            }
-        }
-        else {
-            return function(val) {
-                return true;
-            }            
-        }
-    }
-
-    constructor(relay, sender, sender_domain, rcpt, rcpt_domain)
-    {
-        this.relay = relay;
-        this.checkSender = this.getCheckerFunction(sender);
-        this.checkSenderDomain = this.getCheckerFunction(sender_domain);
-        this.checkRcpt = this.getCheckerFunction(rcpt);
-        this.checkRcptDomain = this.getCheckerFunction(rcpt_domain);
-    }
-}
-
-/////////////////////////////
-
-class RoutingTable
-{
-    routes = [];
-    relays = [];
-
-    constructor(relays, routes)
-    {
-        this.relays = relays;
-        this.routes = routes;
-    }
-
-
-    findRoute(sender, rcpt)
-    {
-        function findFn(route)
-        {
-            let matched = route.match(sender, rcpt);
-            return matched;
-        };
-
-        let foundRoute = routes.find(findFn);
-
-        if (!foundRoute) {
-            return false;
-        }
-
-        let relayname = foundRoute.relay;
-        let relayexists = relayname in relays;
-
-        if (!relayexists) {
-            console.error("Configuration Error!");
-            console.error(`Relay "${relayname}" defined in Routing \nBut cannot be found among relays \nPlease review configuration!\n`);
-            return false;
-        }
-        else {
-            let foundRelay = relays[relayname];
-            return foundRelay;
-        }
-    }
 }

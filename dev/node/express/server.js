@@ -9,6 +9,7 @@ app.listen(3000)
 
 let mails = [];
 let delivery = [];
+let connection = [];
 let name = "Cat";
 
 app.get("/", (req, res) => {
@@ -34,31 +35,41 @@ app.post("/form", (req, res) => {
     res.redirect("/");
 });
 
-app.post("/log", (req, res) => {
+app.post("/api/delivery", (req, res) => {
     console.log(req.body);
     delivery.push(req.body);
     res.send("OK: ");
 });
 
-/*
+app.post("/api/connection", (req, res) => {
+    console.log(req.body);
+    connection.push(req.body);
+    res.send("OK");
+});
 
-{
-    "total": 2,
-    "records": [
-        { "recid": 1, "fname": "Aibulat", "lname": "Nigmatullin", "email": "nigmatullin@gmail.com" },
-        { "recid": 2, "fname": "Yulai", "lname": "Nigmatullin", "email": "ngmYulai@gmail.com"}
-    ]
-}
+app.get("/api/delivery", (req, res) => {
 
-*/
+    for (let i=0; i<delivery.length; i++) {
+        delivery[i].recid = i;
+    }
 
-
-
-
-app.get("/logs", (req, res) => {
     let resp = {
         total: delivery.length,
         records: delivery
+    }
+    res.json(resp);
+});
+
+
+app.get("/api/connection", (req, res) => {
+
+    for (let i=0; i<connection.length; i++) {
+        connection[i].recid = i;
+    }
+
+    let resp = {
+        total: connection.length,
+        records: connection
     }
     res.json(resp);
 });
