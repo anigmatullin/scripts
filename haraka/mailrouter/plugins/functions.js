@@ -1,8 +1,9 @@
+const fs = require('fs');
 
 exports.httplog = function (obj, url)
 {
-    // let jsondata = JSON.stringify(obj);
-    let jsondata = JSON.stringify(obj, censor(obj));
+    let jsondata = JSON.stringify(obj);
+    // let jsondata = JSON.stringify(obj, censor(obj));
 
     let req = {
         method: 'POST',
@@ -38,7 +39,7 @@ exports.getAddrList = function(arr)
     return res;
 }
 
-exports.log = function (msg)
+exports.log = function (msg, logfile = '/tmp/haraka/haraka.log')
 {
     fs.appendFile(logfile, msg + "\n", err => {
         if (err) {
@@ -46,6 +47,97 @@ exports.log = function (msg)
         //file written successfully
     });    
 }
+
+exports.log_queue_params = function(params, url)
+{
+    let obj;
+
+    if (params) {
+        obj = params;
+    }
+    else {
+        obj = {
+            test: "some val"
+        };
+    }
+
+    module.exports.httplog(obj, url);
+}
+
+exports.log_connection = function (connection, url)
+{
+    let obj = {
+        uuid: connection.uuid,
+        start_time: connection.start_time,
+
+        // always should be == 5 for hook_data
+        // state: connection.state,
+
+        encoding: connection.encoding,
+        remoteAddr: connection.client.remoteAddress,
+        remotePort: connection.client.remotePort,
+
+        remote_is_local: connection.remote_is_local,
+        remote_is_private: connection.remote_is_private,
+        // remote_ip: connection.remote_ip,
+        // remote_port: connection.remote_port,
+        remote_host: connection.remote_host,
+        remote_info: connection.remote_info,
+
+        // cfg: connection.cfg,
+        // local: connection.local,
+        // remote: connection.remote,
+
+        // hello: connection.hello,
+        hello_name: connection.hello.host,
+        // tls: connection.tls,
+        // proxy: connection.proxy,
+        using_tls: connection.using_tls,
+
+        /////////////////////////////
+
+        // notes: connection.notes,
+
+        //this one fails for json encoding or being empty
+        // transaction: connection.transaction,
+
+        tran_count: connection.tran_count,
+
+        // our config - no need to log
+        // ehlo_hello_message: connection.ehlo_hello_message,
+
+        // our config - no need to log
+        // connection_close_message: connection.connection_close_message,
+
+        // our config - no need to log
+        // banner_includes_uuid: connection.banner_includes_uuid,
+        // deny_includes_uuid: connection.deny_includes_uuid,
+
+        // not sure what it is:
+        // early_talker: connection.early_talker,
+        // pipelining: connection.pipelining,
+
+        // not really usefull info:
+        // esmtp: connection.esmtp,
+ 
+
+        rcpt_count_accept: connection.rcpt_count.accept,
+        rcpt_count_tempfail: connection.rcpt_count.tempfail,
+        rcpt_count_reject: connection.rcpt_count.reject,
+
+        //not yet having this info or can be misleading:
+        // msg_count: connection.msg_count,
+
+        // ignore as of now:
+        // errors: connection.errors,
+        // last_rcpt_msg: connection.last_rcpt_msg,
+    };
+
+    //prepare logging object from connection object!
+    module.exports.httplog(obj, url);
+}
+
+
 
 function censor(censor) {
     var i = 0;

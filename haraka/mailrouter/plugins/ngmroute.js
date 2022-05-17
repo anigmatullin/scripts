@@ -9,6 +9,7 @@ const cfgrelays  = 'relays.json';
 
 const url_delivery = "http://localhost:3000/api/delivery";
 const url_conn = "http://localhost:3000/api/connection";
+const url_queue = "http://localhost:3000/api/queue";
 
 const Route = require('./Route');
 const RoutingTable = require('./RoutingTable');
@@ -65,9 +66,23 @@ exports.hook_get_mx = function (next, hmail, domain)
 exports.hook_connect = function (next, connection)
 {
     connection.relaying = true;
+    return next(CONT);
+}
 
-    //prepare logging object from connection object!
-    functions.httplog(connection, url_conn);
+
+exports.hook_queue_outbound = function (next, connection)
+{
+    functions.log_connection(connection, url_queue);
+
+    functions.log(connection.transaction);
+    //make log_transaction function!!!!
+    // functions.log_queue_params(params, url_queue);
+    return next(CONT);
+}
+
+exports.hook_data = function (next, connection)
+{
+    functions.log_connection(connection, url_conn);
     return next(CONT);
 }
 
