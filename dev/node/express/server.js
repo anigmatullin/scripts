@@ -4,12 +4,18 @@ const app = express()
 app.use(express.urlencoded({extended: true}))
 app.use(express.json())
 app.use(express.static("public"))
+
 app.set("view engine", "ejs")
+app.set("appName", "NGM Mail Router")
+app.set("x-powered-by", false)
+
 app.listen(3000)
 
 let delivery = [];
 let connection = [];
 let queue = [];
+
+console.log(app.get("env"));
 
 app.get("/", (req, res) => {
     // res.json(delivery);

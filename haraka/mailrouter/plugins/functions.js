@@ -89,7 +89,7 @@ exports.log_connection = function (connection, url)
 {
     let obj = {
         uuid: connection.uuid,
-        start_time: connection.start_time,
+        dt: connection.start_time,
 
         // always should be == 5 for hook_data
         // state: connection.state,
