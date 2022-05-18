@@ -2,19 +2,98 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
 
+    <link rel="stylesheet" href="/lib/bootstrap.css">
     <link rel="stylesheet" href="/lib/w2ui-1.5.css">
 
     <script src="/lib/jquery-3.6.js"></script>
     <script src="/lib/w2ui-1.5.min.js"></script>
+
+    <title>NGM Mail Router</title>
+
+    <style>
+
+    nav>ul>li>a {
+        text-decoration: none;
+        color: white;
+    }
+
+    nav>ul>li>a:hover {
+        text-decoration: none;
+        color: orange;
+    }
+
+    nav>ul>li>a.active {
+        text-decoration: none;
+        color: red;
+    }
+
+    .nav-link.active {
+        text-decoration: none;
+        color: red;
+    }
+
+    nav>ul>li {
+        list-style: none;
+    }
+
+    nav {
+        background-color: black;
+        padding-top: 10px;
+    }
+
+    body {
+        /* background-color: #6c757d; */
+        background-color: #f1f1f1;
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
+
+    </style>
+
 </head>
 <body>
-    <h3>Delivery</h3>
 
-    <div id="grid" style="height: 600px;"></div>
+    <nav class="mb-4 d-flex justify-content-between">
+
+        <ul class="d-flex align-items-center">
+
+            <li><a href="/" id="a-home" class="p-3">Home</a></li>
+
+            <li><a href="/logs/connection.html"  id="a-db" class="p-3">Connection</a></li>
+
+            <li><a href="/logs/queue.html"  id="a-src" class="p-3">Transactions</a></li>
+
+            <li><a href="/logs/delivery.html"  id="a-dst" class="p-3">Delivery</a></li>
+
+            <li><a href="/siem"  id="a-siem" class="p-3">Relays</a></li>
+
+            <li><a href="/fwd"  id="a-fwd" class="p-3">Routing</a></li>
+
+        </ul>
+
+        <ul class="d-flex align-items-center">
+
+            <li>
+                <a href="/profile" id="a-profile" class="p-3">Username</a>
+            </li>
+
+            <li>
+                <a href="/logout" class="p-3">Logout</a>
+            </li>
+
+        </ul>
+        
+    </nav>
+
+    <div id="content" class="p-3">
+
+        <h3>Delivery</h3>
+        <div id="grid" style="height: 800px;"></div>
+
+    </div>
+
 
 <script type="text/javascript">
 
@@ -80,6 +159,8 @@
         w2ui.grid.hideColumn('delay');
     });
 </script>
+
+
 
 </body>
 </html>

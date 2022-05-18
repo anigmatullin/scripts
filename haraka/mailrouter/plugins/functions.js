@@ -47,19 +47,40 @@ exports.log = function (msg, logfile = '/tmp/haraka/haraka.log')
         //file written successfully
     });    
 }
+  
 
-exports.log_queue_params = function(params, url)
+exports.log_transaction = function(txn, url)
 {
     let obj;
 
-    if (params) {
-        obj = params;
+    if (!txn) {
+        module.exports.httplog({status: "empty"}, url);
+        return;
     }
-    else {
-        obj = {
-            test: "some val"
-        };
-    }
+
+    obj = {
+        uuid: txn.uuid,
+        dt: txn.data_post_start,
+        delay_data_post: txn.data_post_delay,
+
+        encoding: txn.encoding,
+        data_bytes: txn.data_bytes,
+        mime_part_count: txn.mime_part_count,
+
+        sender: module.exports.getAddr(txn.mail_from),
+        rcpt_list: module.exports.getAddrList(txn.rcpt_to),
+        // rawHeaders: txn.header_lines,
+        
+        // config items:
+        // parse_body: txn.parse_body,
+        // notes: txn.notes,
+
+        rcpt_count_accept: txn.rcpt_count.accept,
+        rcpt_count_tempfail: txn.rcpt_count.tempfail,
+        rcpt_count_reject: txn.rcpt_count.reject,
+
+        headers: txn.header.headers_decoded,
+    };
 
     module.exports.httplog(obj, url);
 }

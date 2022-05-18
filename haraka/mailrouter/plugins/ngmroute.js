@@ -72,19 +72,16 @@ exports.hook_connect = function (next, connection)
 
 exports.hook_queue_outbound = function (next, connection)
 {
-    functions.log_connection(connection, url_queue);
-
-    functions.log(connection.transaction);
-    //make log_transaction function!!!!
-    // functions.log_queue_params(params, url_queue);
-    return next(CONT);
-}
-
-exports.hook_data = function (next, connection)
-{
     functions.log_connection(connection, url_conn);
+    functions.log_transaction(connection.transaction, url_queue);
     return next(CONT);
 }
+
+// exports.hook_data = function (next, connection)
+// {
+//     functions.log_connection(connection, url_conn);
+//     return next(CONT);
+// }
 
 
 exports.hook_delivered = function (next, hmail, params) {
