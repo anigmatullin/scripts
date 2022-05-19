@@ -3,7 +3,7 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class Connection extends Model {
+  class Transaction extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -13,26 +13,22 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   }
-  Connection.init({
+  Transaction.init({
     dt: DataTypes.DATE,
     uuid: DataTypes.STRING,
     encoding: DataTypes.STRING,
-    hello_name: DataTypes.STRING,
-    remoteAddr: DataTypes.STRING,
-    remotePort: DataTypes.INTEGER,
-    remote_host: DataTypes.STRING,
-    remote_info: DataTypes.STRING,
-    remote_is_local: DataTypes.INTEGER,
-    remote_is_private: DataTypes.INTEGER,
-    using_tls: DataTypes.INTEGER,
-    tran_count: DataTypes.INTEGER,
+    sender: DataTypes.STRING,
+    rcpt_list: DataTypes.STRING,
     rcpt_count_accept: DataTypes.INTEGER,
     rcpt_count_tempfail: DataTypes.INTEGER,
     rcpt_count_reject: DataTypes.INTEGER,
+    delay_data_post: DataTypes.DOUBLE,
+    data_bytes: DataTypes.INTEGER,
+    mime_part_count: DataTypes.INTEGER,
   }, {
     sequelize,
-    modelName: 'Connection',
+    modelName: 'Transaction',
     freezeTableName: true
   });
-  return Connection;
+  return Transaction;
 };

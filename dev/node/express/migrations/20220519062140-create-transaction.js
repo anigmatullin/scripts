@@ -1,9 +1,7 @@
 'use strict';
 module.exports = {
-
-  async up(queryInterface, Sequelize)
-  {
-    await queryInterface.createTable('Connection', {
+  async up(queryInterface, Sequelize) {
+    await queryInterface.createTable('Transaction', {
       
       id: {
         allowNull: false,
@@ -11,53 +9,25 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      
+
       dt: {
         type: Sequelize.DATE
       },
-      
+
       uuid: {
         type: Sequelize.STRING
       },
-      
+
       encoding: {
         type: Sequelize.STRING
       },
-      
-      hello_name: {
+
+      sender: {
         type: Sequelize.STRING
       },
 
-      remoteAddr: {
+      rcpt_list: {
         type: Sequelize.STRING
-      },
-
-      remotePort: {
-        type: Sequelize.INTEGER
-      },
-
-      remote_host: {
-        type: Sequelize.STRING
-      },
-
-      remote_info: {
-        type: Sequelize.STRING
-      },
-
-      remote_is_local: {
-        type: Sequelize.INTEGER
-      },
-
-      remote_is_private: {
-        type: Sequelize.INTEGER
-      },
-
-      using_tls: {
-        type: Sequelize.INTEGER
-      },
-
-      tran_count: {
-        type: Sequelize.INTEGER
       },
 
       rcpt_count_accept: {
@@ -72,6 +42,18 @@ module.exports = {
         type: Sequelize.INTEGER
       },
 
+      delay_data_post: {
+        type: Sequelize.DOUBLE
+      },
+
+      data_bytes: {
+        type: Sequelize.INTEGER
+      },
+
+      mime_part_count: {
+        type: Sequelize.INTEGER
+      },
+
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
@@ -81,12 +63,9 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE
       }
-
     });
   },
-
-  async down(queryInterface, Sequelize)
-  {
-    await queryInterface.dropTable('Connection');
+  async down(queryInterface, Sequelize) {
+    await queryInterface.dropTable('Transaction');
   }
 };

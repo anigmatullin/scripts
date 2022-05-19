@@ -1,9 +1,7 @@
 'use strict';
 module.exports = {
-
-  async up(queryInterface, Sequelize)
-  {
-    await queryInterface.createTable('Connection', {
+  async up(queryInterface, Sequelize) {
+    await queryInterface.createTable('Delivery', {
       
       id: {
         allowNull: false,
@@ -11,65 +9,61 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      
+
       dt: {
         type: Sequelize.DATE
       },
-      
+
       uuid: {
         type: Sequelize.STRING
       },
-      
-      encoding: {
-        type: Sequelize.STRING
-      },
-      
-      hello_name: {
+
+      sender: {
         type: Sequelize.STRING
       },
 
-      remoteAddr: {
+      rcpt_list: {
         type: Sequelize.STRING
       },
 
-      remotePort: {
-        type: Sequelize.INTEGER
-      },
-
-      remote_host: {
+      rcpt_domain: {
         type: Sequelize.STRING
       },
 
-      remote_info: {
+      rcpt_accepted: {
         type: Sequelize.STRING
       },
 
-      remote_is_local: {
+      tls_forced: {
         type: Sequelize.INTEGER
       },
 
-      remote_is_private: {
+      tls: {
         type: Sequelize.INTEGER
       },
 
-      using_tls: {
+      auth: {
         type: Sequelize.INTEGER
       },
 
-      tran_count: {
+      host: {
+        type: Sequelize.STRING
+      },
+
+      ip: {
+        type: Sequelize.STRING
+      },
+
+      port: {
         type: Sequelize.INTEGER
       },
 
-      rcpt_count_accept: {
-        type: Sequelize.INTEGER
+      response: {
+        type: Sequelize.STRING
       },
 
-      rcpt_count_tempfail: {
-        type: Sequelize.INTEGER
-      },
-
-      rcpt_count_reject: {
-        type: Sequelize.INTEGER
+      delay: {
+        type: Sequelize.DOUBLE
       },
 
       createdAt: {
@@ -84,9 +78,7 @@ module.exports = {
 
     });
   },
-
-  async down(queryInterface, Sequelize)
-  {
-    await queryInterface.dropTable('Connection');
+  async down(queryInterface, Sequelize) {
+    await queryInterface.dropTable('Delivery');
   }
 };

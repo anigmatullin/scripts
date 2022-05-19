@@ -39,6 +39,7 @@ exports.getAddrList = function(arr)
     return res;
 }
 
+
 exports.log = function (msg, logfile = '/tmp/haraka/haraka.log')
 {
     fs.appendFile(logfile, msg + "\n", err => {

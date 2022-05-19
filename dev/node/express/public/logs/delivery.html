@@ -98,11 +98,21 @@
 <script type="text/javascript">
 
     $(function () {
+
+        // https://w2ui.com/web/docs/1.5/w2utils.settings
+        
+        w2utils.settings.dateFormat        = "yyyy-mm-dd",
+        w2utils.settings.timeFormat        = "hh:mi:ss",
+        w2utils.settings.datetimeFormat    = "yyyy-mm-dd hh:mi:ss",
+        w2utils.settings.datetimeFormat    = "yyyy-mm-dd",
+        w2utils.settings.date_display      = "yyyy-mm-dd",
+
         $('#grid').w2grid({
             name: 'grid',
+            recid: 'id',
             url: '/api/delivery',
             method: 'GET', // need this to avoid 412 error on Safari
-            multiSearch: false,
+            multiSearch: true,
 
             show: {
                 header: true,
@@ -113,7 +123,9 @@
 
             searches: [
                 // { type: 'int',  field: 'recid', label: 'ID' },
-                { type: 'text', field: 'from', label: 'Sender' },
+                // { type: 'date', field: 'dt', label: 'Date' },
+                { type: 'datetime', field: 'dt', label: 'DateTime' },
+                { type: 'text', field: 'sender', label: 'Sender' },
                 { type: 'text', field: 'rcpt_list', label: 'Recipients' },
                 { type: 'text', field: 'rcpt_domain', label: 'Rcpt Domain'},
                 { type: 'text', field: 'rcpt_accepted', label: 'Rcpt Accepted'},
@@ -128,10 +140,10 @@
             ],
 
             columns: [
-                { field: 'dt', text: 'DT' },
+                { field: 'dt', text: 'DT',  "render": "datetime" },
                 { field: 'uuid', text: 'UUID' },
 
-                { field: 'from', text: 'Sender'},
+                { field: 'sender', text: 'Sender'},
                 { field: 'rcpt_list', text: 'Rcpt' },
 
                 // { field: 'dt', text: 'DT', size: '30%' },

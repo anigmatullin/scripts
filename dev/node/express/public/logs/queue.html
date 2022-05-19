@@ -99,9 +99,10 @@
     $(function () {
         $('#grid').w2grid({
             name: 'grid',
+            recid: 'id',
             url: '/api/queue',
             method: 'GET', // need this to avoid 412 error on Safari
-            multiSearch: false,
+            multiSearch: true,
 
             show: {
                 header: true,
@@ -110,21 +111,22 @@
                 lineNumbers: true
             },
 
-            // searches: [
-            //     // { type: 'int',  field: 'recid', label: 'ID' },
-            //     { type: 'text', field: 'from', label: 'Sender' },
-            //     { type: 'text', field: 'rcpt_list', label: 'Recipients' },
-            //     { type: 'text', field: 'rcpt_domain', label: 'Rcpt Domain'},
-            //     { type: 'text', field: 'rcpt_accepted', label: 'Rcpt Accepted'},
-            //     { type: 'text', field: 'tls_forced', label: 'TLS Enforced'},
-            //     { type: 'text', field: 'tls', label: 'TLS'},
-            //     { type: 'text', field: 'auth', label: 'Auth'},
-            //     { type: 'text', field: 'host', label: 'Host'},
-            //     { type: 'text', field: 'ip', label: 'IP'},
-            //     { type: 'text', field: 'port', label: 'Port'},
-            //     { type: 'text', field: 'response', label: 'Reponse'},
-            //     { type: 'text', field: 'delay', label: 'Delay'},   
-            // ],
+            searches: [
+                // { type: 'int',  field: 'recid', label: 'ID' },
+                { type: 'datetime', field: 'dt', label: 'DT' },
+                { type: 'text', field: 'uuid', label: 'UUID' },
+                { type: 'text', field: 'encoding', label: 'Encoding'},
+                { type: 'text', field: 'sender', label: 'Sender'},
+                { type: 'text', field: 'rcpt_list', label: 'Recipients'},
+
+                { type: 'int', field: 'rcpt_count_accept', label: 'Count Accepted'},
+                { type: 'int', field: 'rcpt_count_tempfail', label: 'Count Tempfail'},
+                { type: 'int', field: 'rcpt_count_reject', label: 'Count Rejected'},
+
+                { type: 'float', field: 'delay_data_post', label: 'Delay'},
+                { type: 'int', field: 'data_bytes', label: 'Size'},
+                { type: 'int', field: 'mime_part_count', label: 'Count Mime Parts'}
+            ],
 
 
             columns: [

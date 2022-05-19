@@ -99,7 +99,7 @@ exports.hook_delivered = function (next, hmail, params) {
     let logdata = {
         uuid: hmail.todo.uuid,
         dt: hmail.todo.queue_time,
-        from: functions.getAddr(hmail.todo.mail_from),
+        sender: functions.getAddr(hmail.todo.mail_from),
         rcpt_domain: hmail.todo.domain,
         rcpt_list: functions.getAddrList(hmail.todo.rcpt_to),
         rcpt_accepted: functions.getAddrList(ok_recips),
