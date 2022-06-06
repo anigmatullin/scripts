@@ -1,29 +1,8 @@
-const { query } = require('express')
-const express = require('express')
+
 const { Op } = require("sequelize")
+const models = require('../models')
 
-const app = express()
-
-const models = require('./models')
-
-app.use(express.urlencoded({extended: true}))
-app.use(express.json())
-app.use(express.static("public"))
-
-app.set("view engine", "ejs")
-app.set("appName", "NGM Mail Router")
-app.set("x-powered-by", false)
-
-app.listen(3000)
-
-let delivery = [];
-let connection = [];
-let queue = [];
-
-console.log(app.get("env"));
-
-
-function prepareRes(data)
+module.exports.prepareRes = function (data)
 {
     // for (let i=0; i<data.length; i++) {
     //     data[i].recid = data[i].id;
@@ -39,7 +18,7 @@ function prepareRes(data)
 };
 
 
-function createFilter(searchLogic, items)
+module.exports.createFilter = function (searchLogic, items)
 {
     if (searchLogic == "OR") {
         return {
@@ -53,8 +32,7 @@ function createFilter(searchLogic, items)
     }
 }
 
-
-function createQuery(params, searchLogic, offset = 0, limit = 100)
+module.exports.createQuery = function (params, searchLogic, offset = 0, limit = 100)
 {
     // possibile w2ui search ops
     //
@@ -134,7 +112,7 @@ function createQuery(params, searchLogic, offset = 0, limit = 100)
     // console.log(filterItems);
 
     if (filterItems) {
-        filter.where = createFilter(searchLogic, filterItems);
+        filter.where = module.exports.createFilter(searchLogic, filterItems);
     }
 
     return filter;
@@ -142,7 +120,7 @@ function createQuery(params, searchLogic, offset = 0, limit = 100)
 
 
 
-function getData(model, request = null)
+module.exports.getData =  function(model, request = null)
 {
     let limit = 100;
     let offset = 0;
@@ -162,7 +140,7 @@ function getData(model, request = null)
         }
     }
 
-    let query = createQuery(searchParams, searchLogic, offset, limit);
+    let query = module.exports.createQuery(searchParams, searchLogic, offset, limit);
 
     console.log(query);
     console.log(searchLogic);
@@ -170,68 +148,23 @@ function getData(model, request = null)
     return model.findAll(query);
 };
 
-app.get("/", (req, res) => {
-    // res.json(delivery);
-    res.render("delivery", {delivery: delivery});
-});
 
-// app.get("/about", (req, res) => {
-//     res.render("about", {thename: 'Test'});
-// });
+module.exports.checkMD5 = async function (items)
+{
+    let md5 = [];
 
-// app.get("/form", (req, res) => {
-//     res.render("form");
-// });
+    items.forEach(el => {
+        if (el?.md5) {
+            md5.push(el.md5);
+        }
+    });
 
-// app.post("/form", (req, res) => {
-//     let m = req.body.mail;
-//     mails.push(m);
-//     res.redirect("/");
-// });
+    let op = {
+        where: {
+            md5: { [Op.in]: md5 }
+        }
+    }
 
-app.post("/api/delivery", (req, res) => {
-    // console.log(req.body);
-    delivery.push(req.body);
-    models.Delivery.create(req.body);
-    res.send("OK: ");
-});
-
-app.get("/api/delivery", (req, res) => {
-
-    getData(models.Delivery, req.query.request)
-    .then(prepareRes)
-    .then(resp => res.json(resp));
-
-});
-
-
-
-
-app.post("/api/connection", (req, res) => {
-    connection.push(req.body);
-    models.Connection.create(req.body);
-    res.send("OK");
-});
-
-app.get("/api/connection", (req, res) => {
-
-    getData(models.Connection, req.query.request)
-    .then(prepareRes)
-    .then(resp => res.json(resp));
-
-});
-
-
-app.post("/api/queue", (req, res) => {
-    console.log(req.body);
-    queue.push(req.body);
-    models.Transaction.create(req.body);
-    res.send("OK");
-});
-
-app.get("/api/queue", (req, res) => {
-
-    getData(models.Transaction, req.query.request)
-    .then(prepareRes)
-    .then(resp => res.json(resp));
-});
+    let promise = models.BlockMD5.findAll(op);
+    return promise;
+}

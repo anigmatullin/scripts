@@ -4,4 +4,6 @@ dnsbl
 helo.checks
 headers
 
+ngmFilterAttach
+
 ngmroute

@@ -14,7 +14,7 @@ exports.httplog = function (obj, url)
         body: jsondata
     };
 
-    return fetch(url, req);
+    return fetch(url, req).catch((err) => {});
 }
 
 
@@ -69,7 +69,8 @@ exports.log_transaction = function(txn, url)
         mime_part_count: txn.mime_part_count,
 
         sender: module.exports.getAddr(txn.mail_from),
-        rcpt_list: module.exports.getAddrList(txn.rcpt_to),
+        // rcpt_list: module.exports.getAddrList(txn.rcpt_to),
+        rcpt_to: txn.rcpt_to,
         // rawHeaders: txn.header_lines,
         
         // config items:

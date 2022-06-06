@@ -1,7 +1,7 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
+
+const {Model} = require('sequelize');
+
 module.exports = (sequelize, DataTypes) => {
   class Transaction extends Model {
     /**
@@ -13,6 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   }
+
   Transaction.init({
     dt: DataTypes.DATE,
     uuid: DataTypes.STRING,
@@ -30,5 +31,7 @@ module.exports = (sequelize, DataTypes) => {
     modelName: 'Transaction',
     freezeTableName: true
   });
+
+
   return Transaction;
 };
