@@ -3,7 +3,7 @@
 const {Model} = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
-  class Transaction extends Model {
+  class v_lookup extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -14,10 +14,17 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
 
-  Transaction.init({
-    dt: DataTypes.DATE,
-    uuid: DataTypes.STRING,
+  v_lookup.init({
+
+    txn_uuid: DataTypes.STRING,
+    md5: DataTypes.STRING,
+    contentType: DataTypes.STRING,
+    filename: DataTypes.STRING,
+    size: DataTypes.INTEGER,
     action: DataTypes.STRING,
+
+    dt: DataTypes.DATE,
+    txn_action: DataTypes.STRING,
     encoding: DataTypes.STRING,
     sender: DataTypes.STRING,
     rcpt_list: DataTypes.STRING,
@@ -29,10 +36,10 @@ module.exports = (sequelize, DataTypes) => {
     mime_part_count: DataTypes.INTEGER,
   }, {
     sequelize,
-    modelName: 'Transaction',
-    freezeTableName: true
+    modelName: 'v_lookup',
+    freezeTableName: false
   });
 
 
-  return Transaction;
+  return v_lookup;
 };

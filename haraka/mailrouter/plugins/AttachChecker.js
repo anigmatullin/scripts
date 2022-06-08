@@ -4,10 +4,12 @@ const simpleParser = require('mailparser').simpleParser;
 module.exports = class AttachChecker
 {
     url = "";
+    uuid = "";
 
-    constructor(url)
+    constructor(url, uuid)
     {
         this.url = url;
+        this.uuid = uuid;
     }
 
     async checkHashList(list)
@@ -46,13 +48,20 @@ module.exports = class AttachChecker
         // return parsed;
 
         parsed.attachments.forEach(item => {
+
+            if (item.contentDisposition != 'attachment') {
+                return;
+            }
             
             let tmp = {
                 contentType: item.contentType,
                 filename: item.filename,
                 size: item.size,
-                md5: item.checksum
+                md5: item.checksum,
+                txn_uuid: this.uuid
             };
+
+            // tmp = item;
 
             res.push(tmp);
         })

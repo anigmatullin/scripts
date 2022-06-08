@@ -1,16 +1,19 @@
 'use strict';
 
-
-const fs   = require('fs');
 const path = require('path');
+const functions = require("./functions");
 const AttachChecker = require("../plugins/AttachChecker");
 
 
+const url_conn = "http://localhost:3000/api/connection";
+const url_queue = "http://localhost:3000/api/queue";
+const url_filter = "http://localhost:3000/filter/md5";
 
-exports.register = function ()
+
+exports.register = function()
 {
     const plugin = this;
-}
+};
 
 
 exports.get_tmp_file = function (transaction)
@@ -28,62 +31,17 @@ exports.hook_data_post = async function (next, connection)
         return next();
     }
 
-    // const tmpfile = plugin.get_tmp_file(connection.transaction);
-    // const ws      = fs.createWriteStream(tmpfile);
+    let uuid = connection.transaction.uuid;
 
-    // ws.once('error', err => {
-    //     connection.results.add(plugin, {
-    //         err: `Error writing temporary file: ${err.message}`
-    //     });
-    //     if (!plugin.cfg.defer.error) return next();
-    //     return next(DENYSOFT, 'Attach Scan Error');
-    // });
-
-    // ws.once('close', () => {
-
-    //     function do_next (code, msg) {
-    //         fs.unlink(tmpfile, () => {});
-    //         return next(code, msg);
-    //     }
-
-    //     new EmlParser(fs.createReadStream(tmpfile))
-    //         .parseEml()
-    //         .then(result  => {
-    //             // properties in result object:
-    //             // {
-    //             //	"attachments": [],
-    //             //	"headers": {},
-    //             //	"headerLines": [],
-    //             //	"html": "",
-    //             //	"text": "",
-    //             //	"textAsHtml": "",
-    //             //	"subject": "",
-    //             //	"references": "",
-    //             //	"date": "",
-    //             //	"to": {},
-    //             //	"from": {},
-    //             //	"cc": {},
-    //             //	"messageId": "",
-    //             //	"inReplyTo": ""
-    //             // }
-    //             console.log(result);
-    //         })
-    //         .catch(err  => {
-    //             console.log(err);
-    //         });
-        
-    //     return next();
-
-    // });
-
-    // connection.transaction.message_stream.pipe(ws, { line_endings: '\r\n' });
-
-    const url = "http://localhost:3000/filter/md5"
-    const checker = new AttachChecker(url);
+    const url = url_filter;
+    const checker = new AttachChecker(url, uuid);
     
     let result = null;
-
     await checker.check(connection.transaction.message_stream).then(res => result = res);
+
+    connection.transaction.action = result;
+    functions.log_connection(connection, url_conn);
+    functions.log_transaction(connection.transaction, url_queue);
 
     if (result == "allow") {
         return next();

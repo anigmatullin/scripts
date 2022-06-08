@@ -62,6 +62,7 @@ exports.log_transaction = function(txn, url)
     obj = {
         uuid: txn.uuid,
         dt: txn.data_post_start,
+        action: txn.action,
         delay_data_post: txn.data_post_delay,
 
         encoding: txn.encoding,

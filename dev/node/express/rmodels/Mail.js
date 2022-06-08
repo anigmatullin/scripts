@@ -10,7 +10,7 @@ module.exports = class Mail
     constructor(txn)
     {
         txn.rcpt_list = this.getAddrList(txn.rcpt_to);
-        this.rcpts = this.getAddrArray(txn.rcpt_to);///////////////////////////////////////// to be impl!
+        this.rcpts = this.getAddrArray(txn.rcpt_to);
         this.txn = txn;
 
         models.MailAddr.belongsToMany(models.Transaction, { through: 'linkAddrTransaction' });

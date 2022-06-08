@@ -38,3 +38,18 @@ npx sequelize-cli model:generate \
     --name BlockMD5 \
     --attributes \
     md5:string,comment:string
+
+npx sequelize-cli model:generate \
+    --name HashLookup \
+    --attributes \
+    txn_uuid:string,md5:string,contentType:string,filename:string,size:integer,action:string
+
+npx sequelize-cli model:generate \
+    --name RelayGroup \
+    --attributes \
+    name:string,description:string
+
+npx sequelize-cli model:generate \
+    --name Relay \
+    --attributes \
+    group_id:integer,name:string,host:string,port:integer,auth_user:string,auth_pass:string,priority:integer

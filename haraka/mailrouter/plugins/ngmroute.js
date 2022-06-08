@@ -3,7 +3,7 @@ const fetch = require("node-fetch");
 
 const functions = require("./functions");
 
-const logfile = '/tmp/haraka/haraka.log';
+// const logfile = '/tmp/haraka/haraka.log';
 const cfgrouting = 'routing.json';
 const cfgrelays  = 'relays.json';
 
@@ -70,16 +70,10 @@ exports.hook_connect = function (next, connection)
 }
 
 
-exports.hook_queue_outbound = function (next, connection)
-{
-    functions.log_connection(connection, url_conn);
-    functions.log_transaction(connection.transaction, url_queue);
-    return next(CONT);
-}
-
-// exports.hook_data = function (next, connection)
+// exports.hook_queue_outbound = function (next, connection)
 // {
 //     functions.log_connection(connection, url_conn);
+//     functions.log_transaction(connection.transaction, url_queue);
 //     return next(CONT);
 // }
 

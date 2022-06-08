@@ -145,6 +145,8 @@ module.exports.getData =  function(model, request = null)
     console.log(query);
     console.log(searchLogic);
 
+    query.order = [['id', 'DESC'],];
+
     return model.findAll(query);
 };
 
@@ -167,4 +169,57 @@ module.exports.checkMD5 = async function (items)
 
     let promise = models.BlockMD5.findAll(op);
     return promise;
+}
+
+
+// models.HashLookup.create(obj);
+
+module.exports.hashListLookup = async function (list)
+{
+    let action = "allow";
+    let promises = [];
+    let answers = [];
+
+    list.forEach(txn => {
+        let tmp = module.exports.hashLookup(txn)
+            .then(answer => answers.push(answer));
+        promises.push(tmp);
+    })
+
+    await Promise.all(promises);
+
+    // console.log(answers);
+
+    answers.forEach(item => {
+        if (item != "allow") {
+            action = "block";
+        }
+    });
+
+    return action;
+}
+
+module.exports.hashLookup = async function (txn)
+{
+    let md5 = txn.md5;
+    let action = "allow";
+
+    let op = {
+        where: {
+            md5: { [Op.eq]: md5 }
+        }
+    }
+
+    let res = await models.BlockMD5.findAll(op);
+
+    if (res.length) {
+        action = "block";
+    }
+
+    // console.log(txn);
+    
+
+    txn.action = action;
+    models.HashLookup.create(txn);
+    return action;
 }
