@@ -1,15 +1,22 @@
 <%- include('../header') %>
 
 <div class="row">
+  <div class="table-title col-sm-12 col-md-12 col-lg-12 col-xl-11" style="margin: 20px">
+    <h3 style="display: inline;"><b>Relay Groups</b></h3>
+
+    <a href="/config/relaygrp/create" class="btn btn-success">
+      <i class="material-icons">&#xE147;</i><span>Add</span>
+    </a>
+
+  </div>
+</div>
+
+<div class="row">
     <div class="col-sm-12 col-md-8 col-lg-8 col-xl-8" style="margin-left: 15px;">
   
-  <table id="rows" class="table table-striped table-bordered nogrid"  data-page-length='50' >
+  <table id="rows" class="table table-bordered border-secondary nogrid">
   
     <thead>
-      <colgroup>
-        <col style="width: 35px">
-        <col style="width: 50px">
-      </colgroup>
       <tr>
         <th>ID</th>
         <th>Name</th>
@@ -19,20 +26,24 @@
     </thead>
   
   <tbody>
+
+    <% data.forEach(function(row) { %>
+
+
+      <tr>
+        <td><%= row.id %></td>
+        <td><a href="/config/relaygrp/<%= row.id %>"><%= row.name %></a></td>
+        <td><%= row.description %></td>
+      
+        <td>
+          <a href="/config/relaygrp/edit/<%= row.id %>"     class="edit"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+          <a href="/config/relaygrp/delete/<%= row.id %>"   class="delete"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+        </td>
+      
+      </tr>
+
+    <% }); %>
   
-  {% for row in rows %}
-  <tr>
-    <td>{{row.role_id}}</td>
-    <td>{{row.role_name}}</td>
-    <td>{{row.role_description}}</td>
-  
-    <td>
-      <a href="/eq/roles/edit/{{row.role_id}}"     class="edit"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-      <a href="/eq/roles/delete/{{row.role_id}}"   class="delete"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
-    </td>
-  
-  </tr>
-  {% endfor %}
   </tbody>
   </table>
   
