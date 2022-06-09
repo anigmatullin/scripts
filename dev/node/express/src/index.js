@@ -4,7 +4,7 @@ const routes = require('./routes/root.js');
 const routesLog = require('./routes/log.js');
 const routesApi = require('./routes/api.js');
 const routesFilter = require('./routes/filter.js');
-const routesConfig = require('./routes/config.js');
+const routesConfig = require('./routes/config-relay.js');
 
 const app = express()
 
