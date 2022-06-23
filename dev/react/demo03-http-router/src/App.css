@@ -1,0 +1,26 @@
+.active {
+    color: red;
+    cursor: default;
+    text-decoration: none;
+}
+
+header > a {
+    text-decoration: none;
+    color: white;
+}
+
+header > a:hover {
+    text-decoration: none;
+    color: yellow;
+}
+
+header {
+    padding-top: 1em;
+    padding-bottom: 1em;
+    margin-bottom: 2em;
+    background-color:black
+}
+
+input {
+    border: 1px solid black;
+}

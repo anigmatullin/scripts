@@ -1,0 +1,48 @@
+{
+  "posts": [
+    {
+      "id": 1,
+      "title": "json-server",
+      "author": "typicode"
+    }
+  ],
+  "comments": [
+    {
+      "id": 1,
+      "body": "some comment",
+      "postId": 1
+    }
+  ],
+  "profile": {
+    "name": "typicode"
+  },
+  "contacts": [
+    {
+      "id": 1,
+      "name": "Aibulat",
+      "phone": "+79262857757"
+    },
+    {
+      "id": 2,
+      "name": "Lili",
+      "phone": "+79262857751"
+    },
+    {
+      "id": 3,
+      "name": "Yulai",
+      "phone": "+79262857753"
+    },
+    {
+      "id": 4,
+      "name": "Azamat",
+      "phone": "+7926255551"
+    }
+  ],
+  "products": [
+    {
+      "id": 1,
+      "name": "MacBook",
+      "price": 1500
+    }
+  ]
+}
