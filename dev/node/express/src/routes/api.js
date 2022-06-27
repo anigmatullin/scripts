@@ -28,6 +28,8 @@ router.post("/connection", (req, res) => {
 
 router.get("/connection", (req, res) => {
 
+    // res.set('Access-Control-Allow-Origin', '*');
+
     functions.getData(models.Connection, req.query.request)
     .then(functions.prepareRes)
     .then(resp => res.json(resp));

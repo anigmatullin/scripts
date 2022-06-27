@@ -53,3 +53,16 @@ npx sequelize-cli model:generate \
     --name Relay \
     --attributes \
     group_id:integer,name:string,host:string,port:integer,auth_user:string,auth_pass:string,priority:integer
+
+
+npx sequelize-cli model:generate \
+    --name Config \
+    --attributes \
+    name:string,value:string
+
+
+npx sequelize-cli model:generate \
+    --name Log \
+    --attributes \
+    url:string,path:string,query:string,src_ip:string,src_port:integer,referer:string,origin:string,method:string,user:string,userAgent:string
+    

@@ -128,16 +128,24 @@ module.exports.getData =  function(model, request = null)
     let searchLogic = "AND";
 
     if (request) {
-        
-        let q = JSON.parse(request);
-        console.log(q);
-        limit = q.limit;
-        offset = q.offset;
 
-        if (q.search) {
-            searchParams = q.search;
-            searchLogic = q.searchLogic;
+        try {
+            let q = JSON.parse(request);
+            console.log(q);
+            limit = q.limit;
+            offset = q.offset;
+    
+            if (q.search) {
+                searchParams = q.search;
+                searchLogic = q.searchLogic;
+            }
         }
+
+        catch (e) {
+            console.log("JSON Parse Err:");
+            console.log(request);
+        }
+
     }
 
     let query = module.exports.createQuery(searchParams, searchLogic, offset, limit);
