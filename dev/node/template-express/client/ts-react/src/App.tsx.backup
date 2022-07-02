@@ -1,0 +1,35 @@
+import { url } from 'inspector';
+import React from 'react';
+import './App.css';
+
+function App()
+{
+    const data = {
+        user: "user1",
+        payload: 2,
+    };
+
+    const options = {
+        method: "get",
+        // body: JSON.stringify(data),
+        headers: {
+            'Content-Type': 'application/json',
+            'Custom': 'someval',
+        }
+    };
+
+   
+
+
+
+
+    return (
+        <div className="App">
+        <header className="App-header">
+            <h3>Salam Aleikum!</h3>
+        </header>
+        </div>
+    );
+}
+
+export default App;

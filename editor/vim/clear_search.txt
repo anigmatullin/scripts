@@ -1,6 +1,0 @@
-:nnoremap
-:noh 
-
-To clear the last used search pattern:
-:let @/ = ""
-
