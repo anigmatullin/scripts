@@ -1,0 +1,19 @@
+{
+  "name": "01",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "console-table-printer": "^2.11.0",
+    "content-disposition": "^0.5.4",
+    "file-type": "^17.1.4",
+    "md5-file": "^5.0.0",
+    "mmmagic": "^0.5.3",
+    "terminal-codes-to-html": "^0.0.1"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "name": "jsping",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "nigmatullin@gmail.com",
+  "license": "ISC",
+  "dependencies": {
+    "geoip-lite": "^1.4.5",
+    "raw-socket": "^1.7.0",
+    "whois": "^2.13.9"
+  }
+}
